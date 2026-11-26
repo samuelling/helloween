@@ -127,7 +127,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { initWalk } from './walk.js?v=11';
 import { addNeighborhood } from './neighborhood.js?v=11';
-import { initDecorator } from './decorator.js?v=11';
+import { initDecorator } from './decorator.js?v=12';
 
 const LABELS = {
   Cam_01_Street_Wide: 'From the street', Cam_02_Yard_Front: 'Front yard', Cam_03_Ritual: 'The circle',
@@ -237,6 +237,7 @@ Promise.all([fetch('scene.json').then(r => r.json()), loader.loadAsync('scene.gl
   document.getElementById('loading').remove();
   deco = initDecorator({ scene, camera, renderer, orbit: controls, root: gltf.scene, hood,
     redLights: lights.filter(l => l.userData.red) });
+  window.__hw = { THREE, scene, camera, deco, walk };
   const clock = new THREE.Clock();
   renderer.setAnimationLoop(() => {
     const dt = clock.getDelta();

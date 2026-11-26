@@ -41,6 +41,7 @@
     background:rgba(0,0,0,.7); border:1px solid var(--red); border-radius:10px; font:italic 20px Georgia; color:#eee; cursor:pointer; }
   body.walking header, body.walking #hint { display:none; }
   body.walking #walkHelp, body.walking #crosshair { display:block; }
+  #attrib { position:absolute; right:12px; bottom:8px; font:10px system-ui; color:rgba(255,255,255,.35); max-width:60%; text-align:right; }
   #hint { position:absolute; left:22px; bottom:16px; color:var(--dim); font:12px system-ui; }
   #loading { position:absolute; inset:0; display:grid; place-items:center; color:var(--dim);
     font:italic 18px Georgia; }
@@ -83,6 +84,7 @@
     <label>Exposure <input type="range" id="exposure" min="0.2" max="3" step="0.01" value="0.75"></label>
   </div>
   <div id="hint">drag to orbit · scroll to zoom · right-drag to pan</div>
+  <div id="attrib"></div>
   <div id="crosshair"></div>
   <div id="walkHelp">WASD / arrows move · mouse looks · Shift run · Space jump · F flashlight · Esc for menu</div>
   <div id="paused">Click to keep walking</div>
@@ -129,7 +131,7 @@ import { addNeighborhood } from './neighborhood.js';
 const LABELS = {
   Cam_01_Street_Wide: 'From the street', Cam_02_Yard_Front: 'Front yard', Cam_03_Ritual: 'The circle',
   Cam_04_Horned_Figure: 'On the steps', Cam_05_Low_Angle: 'Looking up', Cam_06_Horns_Closeup: 'The horns',
-  Cam_07_Jawbone_Girl: 'Jawbone girl', Cam_08_Overhead: 'From above'
+  Cam_07_Jawbone_Girl: 'Jawbone girl', Cam_08_Overhead: 'From above', Block: 'The block'
 };
 const PUBLIC_PHOTOS = new Set(['IMG_9899.jpeg','IMG_0134.jpeg','IMG_0135.jpeg','IMG_0136.jpeg',
   'IMG_0137.jpeg','IMG_0138.jpeg','IMG_0140.jpeg']);
@@ -150,6 +152,7 @@ const camera = new THREE.PerspectiveCamera(60, 1, 0.05, 400);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.maxPolarAngle = Math.PI * 0.495;
+controls.maxDistance = 140;
 
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
@@ -174,8 +177,9 @@ addEventListener('resize', resize);
 const draco = new DRACOLoader().setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
 const loader = new GLTFLoader().setDRACOLoader(draco);
 
-Promise.all([fetch('scene.json').then(r => r.json()), loader.loadAsync('scene.glb')]).then(([json, gltf]) => {
+Promise.all([fetch('scene.json').then(r => r.json()), loader.loadAsync('scene.glb')]).then(async ([json, gltf]) => {
   info = json;
+  info.cameras.push({ name: 'Block', photo: '', pos: [38, 42, 70], target: [0, 0, 5], vfov: 45 });
   gltf.scene.traverse(o => {
     if (o.isMesh) {
       o.castShadow = true; o.receiveShadow = true;
@@ -187,8 +191,11 @@ Promise.all([fetch('scene.json').then(r => r.json()), loader.loadAsync('scene.gl
     }
   });
   scene.add(gltf.scene);
-  addNeighborhood(scene);
-  walk = initWalk({ scene, camera, renderer, orbit: controls, root: gltf.scene, ui: {
+  let hood = null;
+  try { hood = await addNeighborhood(scene); $('attrib').textContent = hood.attribution; }
+  catch (e) { console.warn('neighbourhood failed', e); }
+  walk = initWalk({ scene, camera, renderer, orbit: controls, root: gltf.scene,
+    extraFloors: hood ? hood.floors : [], extraWalls: hood ? hood.walls : [], extent: hood ? hood.extent : 38, ui: {
     onWalk: on => { document.body.classList.toggle('walking', on); $('walkBtn').textContent = on ? '✕ Stop walking' : '🚶 Walk around';
                     $('paused').style.display = 'none'; },
     onPaused: () => { $('paused').style.display = 'grid'; } } });

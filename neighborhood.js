@@ -1,84 +1,123 @@
-// Placeholder street context: generic neighbouring houses, street trees and two lamp posts.
-// Not real geometry. Swap it for real footprints or a splat scan later (see README).
-// Coordinates are glTF/three (x = east-west along the street, z = toward the street, y = up).
+// Real neighbourhood around the house: terrain (USGS 3DEP) draped with MassGIS 2025 aerial imagery,
+// OpenStreetMap footprints extruded into houses with hip roofs textured from the same aerial.
+// Data lives in geo/neighborhood.json in model-local metres (x along Irving St, -y toward the street);
+// three.js coords are (x, z_up, -y).
 import * as THREE from 'three';
 
-function house(w, d, h, pitch, sidingHex, rnd) {
-  const g = new THREE.Group();
-  const siding = new THREE.MeshStandardMaterial({ color: sidingHex, roughness: 0.85 });
-  const roof = new THREE.MeshStandardMaterial({ color: 0x1b1b1e, roughness: 0.9 });
-  const body = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), siding);
-  body.position.y = h / 2; g.add(body);
-  const rh = (d / 2) * Math.tan(pitch);
-  const shape = new THREE.Shape([new THREE.Vector2(-d / 2 - 0.4, 0), new THREE.Vector2(d / 2 + 0.4, 0), new THREE.Vector2(0, rh + 0.3)]);
-  const r = new THREE.Mesh(new THREE.ExtrudeGeometry(shape, { depth: w + 0.6, bevelEnabled: false }), roof);
-  r.rotation.y = Math.PI / 2; r.position.set(-w / 2 - 0.3, h, 0); g.add(r);
-  const winGeo = new THREE.PlaneGeometry(0.9, 1.5);
-  for (const fy of [h * 0.3, h * 0.72]) {
-    for (let i = 0; i < 3; i++) {
-      const lit = rnd() < 0.4;
-      const m = new THREE.MeshStandardMaterial({ color: 0x111111, emissive: lit ? 0xffb56b : 0x0a0c12, emissiveIntensity: lit ? 1.2 : 0.4 });
-      const win = new THREE.Mesh(winGeo, m);
-      win.position.set((i - 1) * w * 0.3, fy, d / 2 + 0.01);
-      if (lit) win.userData.nightGlow = 1.2;
-      g.add(win);
+export async function addNeighborhood(scene) {
+  const data = await fetch('geo/neighborhood.json').then(r => r.json());
+  const group = new THREE.Group(); group.name = 'Neighborhood';
+  const tex = await new THREE.TextureLoader().loadAsync(data.aerial.file);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 8;
+  const [au, av] = data.aerial.uv_affine;
+  const uvOf = (X, Y) => [au[0] * X + au[1] * Y + au[2], 1 - (av[0] * X + av[1] * Y + av[2])];
+
+  // ---------------------------------------------------------------- terrain
+  const T = data.terrain;
+  const heightAtModel = (X, Y) => {
+    const fx = THREE.MathUtils.clamp((X - T.x0) / T.step, 0, T.nx - 1.001);
+    const fy = THREE.MathUtils.clamp((Y - T.y0) / T.step, 0, T.ny - 1.001);
+    const i = Math.floor(fx), j = Math.floor(fy), a = fx - i, b = fy - j;
+    const z = T.z;
+    return (1 - a) * (1 - b) * z[j][i] + a * (1 - b) * z[j][i + 1] + (1 - a) * b * z[j + 1][i] + a * b * z[j + 1][i + 1];
+  };
+  const pos = [], uv = [], idx = [];
+  for (let j = 0; j < T.ny; j++) for (let i = 0; i < T.nx; i++) {
+    const X = T.x0 + i * T.step, Y = T.y0 + j * T.step;
+    pos.push(X, T.z[j][i] - 0.02, -Y);
+    uv.push(...uvOf(X, Y));
+  }
+  for (let j = 0; j < T.ny - 1; j++) for (let i = 0; i < T.nx - 1; i++) {
+    const a = j * T.nx + i, b = a + 1, c = a + T.nx, d = c + 1;
+    idx.push(a, c, b, b, c, d);
+  }
+  const tg = new THREE.BufferGeometry();
+  tg.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  tg.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  tg.setIndex(idx); tg.computeVertexNormals();
+  const ground = new THREE.Mesh(tg, new THREE.MeshStandardMaterial({ map: tex, roughness: 0.95 }));
+  ground.name = 'Terrain'; ground.receiveShadow = true;
+  group.add(ground);
+
+  // ---------------------------------------------------------------- buildings
+  const winTex = windowTexture();
+  const wallPos = [], wallUv = [], wallCol = [], roofPos = [], roofUv = [];
+  const palette = [0xb9b6ae, 0x9aa3a8, 0xc4b8a2, 0x8f9a8a, 0xa89480, 0xd2cfc6, 0x7f8891, 0xb3a28f].map(c => new THREE.Color(c));
+  let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  for (const b of data.buildings) {
+    const P = b.pts, n = P.length, z0 = b.base - 0.3, z1 = b.base + b.walls, z2 = z1 + b.roof;
+    const col = palette[Math.floor(rnd() * palette.length)];
+    // walls
+    for (let i = 0; i < n; i++) {
+      const [x0, y0] = P[i], [x1, y1] = P[(i + 1) % n];
+      const L = Math.hypot(x1 - x0, y1 - y0);
+      const quad = [[x0, z0, -y0], [x1, z0, -y1], [x1, z1, -y1], [x0, z1, -y0]];
+      const u1 = L / 3.2, v0 = -0.3 / 2.9, v1 = b.walls / 2.9;
+      const q = [[0, v0], [u1, v0], [u1, v1], [0, v1]];
+      for (const k of [0, 1, 2, 0, 2, 3]) { wallPos.push(...quad[k]); wallUv.push(...q[k]); wallCol.push(col.r, col.g, col.b); }
     }
+    // hip roof: ring shrunk toward the centroid
+    const cx = P.reduce((s, p) => s + p[0], 0) / n, cy = P.reduce((s, p) => s + p[1], 0) / n;
+    const s = b.roof > 0 ? 0.32 : 1.0;
+    const top = P.map(([x, y]) => [cx + (x - cx) * s, cy + (y - cy) * s]);
+    const eave = P.map(([x, y]) => { const dx = x - cx, dy = y - cy, l = Math.hypot(dx, dy) || 1; return [x + dx / l * 0.35, y + dy / l * 0.35]; });
+    if (b.roof > 0) for (let i = 0; i < n; i++) {
+      const a = eave[i], bb = eave[(i + 1) % n], c = top[(i + 1) % n], d = top[i];
+      const tri = [[a, z1], [bb, z1], [c, z2], [a, z1], [c, z2], [d, z2]];
+      for (const [[x, y], zz] of tri) { roofPos.push(x, zz, -y); roofUv.push(...uvOf(x, y)); }
+    }
+    const tris = THREE.ShapeUtils.triangulateShape(top.map(p => new THREE.Vector2(p[0], p[1])), []);
+    for (const t of tris) for (const k of [t[0], t[2], t[1]]) { const [x, y] = top[k]; roofPos.push(x, z2, -y); roofUv.push(...uvOf(x, y)); }
   }
-  g.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
-  return g;
-}
+  const wg = new THREE.BufferGeometry();
+  wg.setAttribute('position', new THREE.Float32BufferAttribute(wallPos, 3));
+  wg.setAttribute('uv', new THREE.Float32BufferAttribute(wallUv, 2));
+  wg.setAttribute('color', new THREE.Float32BufferAttribute(wallCol, 3));
+  wg.computeVertexNormals();
+  const wallMat = new THREE.MeshStandardMaterial({ map: winTex.map, emissiveMap: winTex.glow, emissive: 0xffb36b,
+    emissiveIntensity: 1.4, vertexColors: true, roughness: 0.9, side: THREE.DoubleSide });
+  const walls = new THREE.Mesh(wg, wallMat);
+  walls.name = 'Neighbor_Walls'; walls.castShadow = walls.receiveShadow = true;
+  walls.userData.nightGlow = 1.4;
+  const rg = new THREE.BufferGeometry();
+  rg.setAttribute('position', new THREE.Float32BufferAttribute(roofPos, 3));
+  rg.setAttribute('uv', new THREE.Float32BufferAttribute(roofUv, 2));
+  rg.computeVertexNormals();
+  const roofs = new THREE.Mesh(rg, new THREE.MeshStandardMaterial({ map: tex, roughness: 0.85, side: THREE.DoubleSide }));
+  roofs.name = 'Neighbor_Roofs'; roofs.castShadow = true;
+  group.add(walls, roofs);
 
-function tree(h, rnd) {
-  const g = new THREE.Group();
-  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.28, h * 0.5, 8),
-    new THREE.MeshStandardMaterial({ color: 0x2a1d14, roughness: 1 }));
-  trunk.position.y = h * 0.25; g.add(trunk);
-  const leaf = new THREE.MeshStandardMaterial({ color: new THREE.Color().setHSL(0.06 + rnd() * 0.04, 0.55, 0.16), roughness: 1 });
-  for (let i = 0; i < 4; i++) {
-    const b = new THREE.Mesh(new THREE.IcosahedronGeometry(h * (0.22 + rnd() * 0.08), 1), leaf);
-    b.position.set((rnd() - 0.5) * h * 0.3, h * (0.6 + rnd() * 0.25), (rnd() - 0.5) * h * 0.3);
-    g.add(b);
-  }
-  g.traverse(o => { if (o.isMesh) o.castShadow = true; });
-  return g;
-}
-
-export function addNeighborhood(scene) {
-  let seed = 31;
-  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-  const hood = new THREE.Group(); hood.name = 'Placeholder_Neighborhood';
-  const colours = [0x8c8f94, 0x6f7c86, 0xa89f8f, 0x5d6b5f, 0x9a8a7a, 0x7a6f86];
-  // same side of the street (house fronts face +z toward the street, front wall at z = 0)
-  for (const [x, w, d, h] of [[-18.5, 9, 12, 8.5], [-31, 10, 13, 7.8], [20, 9.5, 12, 9], [32.5, 9, 11, 7.6]]) {
-    const hs = house(w, d, h, 0.62, colours[Math.floor(rnd() * colours.length)], rnd);
-    hs.position.set(x, 0, -d / 2 - 0.5); hood.add(hs);
-  }
-  // across the street (fronts face -z)
-  for (const x of [-26, -13, 0, 13, 26]) {
-    const w = 8.5 + rnd() * 2, d = 11 + rnd() * 2, h = 7.5 + rnd() * 2;
-    const hs = house(w, d, h, 0.6, colours[Math.floor(rnd() * colours.length)], rnd);
-    hs.rotation.y = Math.PI; hs.position.set(x + (rnd() - 0.5) * 2, 0, 18 + d / 2 + 5); hood.add(hs);
-  }
-  // opposite sidewalk + ground beyond the street
-  const far = new THREE.Mesh(new THREE.PlaneGeometry(80, 30), new THREE.MeshStandardMaterial({ color: 0x15170f, roughness: 1 }));
-  far.rotation.x = -Math.PI / 2; far.position.set(0, -0.005, 30 + 15 - 8); far.receiveShadow = true; far.name = 'Lawn_Far';
-  hood.add(far);
-  const walk = new THREE.Mesh(new THREE.BoxGeometry(80, 0.1, 1.8), new THREE.MeshStandardMaterial({ color: 0x3a3936, roughness: 0.9 }));
-  walk.position.set(0, -0.08, 21.2); walk.receiveShadow = true; walk.name = 'Sidewalk_Far'; hood.add(walk);
-  // street trees
-  for (const [x, z] of [[-9, 9.3], [11, 9.4], [-22, 9.2], [24, 9.5], [-6, 21.3], [8, 21.4], [-19, 21.2]]) {
-    const t = tree(7 + rnd() * 4, rnd); t.position.set(x, 0, z); hood.add(t);
-  }
-  // lamp posts with warm sodium light
-  for (const [x, z] of [[-14, 9.6], [16, 21.0]]) {
-    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.1, 6, 8), new THREE.MeshStandardMaterial({ color: 0x111111 }));
-    pole.position.set(x, 3, z); hood.add(pole);
+  // ---------------------------------------------------------------- street lamps along the sidewalk
+  for (const X of [-16, 19]) {
+    const Y = -9.7, h = heightAtModel(X, Y);
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.1, 6.5, 8), new THREE.MeshStandardMaterial({ color: 0x111111 }));
+    pole.position.set(X, h + 3.25, -Y); group.add(pole);
     const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.22, 12, 8),
       new THREE.MeshStandardMaterial({ color: 0x222222, emissive: 0xffa95a, emissiveIntensity: 3 }));
-    bulb.position.set(x, 6, z); bulb.userData.nightGlow = 3; hood.add(bulb);
-    const l = new THREE.PointLight(0xffa95a, 40, 30, 2); l.position.set(x, 5.8, z); hood.add(l);
-    l.userData.isStreetLamp = true;
+    bulb.position.set(X, h + 6.5, -Y); bulb.userData.nightGlow = 3; group.add(bulb);
+    const l = new THREE.PointLight(0xffa95a, 40, 30, 2); l.position.set(X, h + 6.3, -Y); group.add(l);
   }
-  scene.add(hood);
-  return hood;
+
+  scene.add(group);
+  return { group, floors: [ground], walls: [walls], heightAt: (x, z) => heightAtModel(x, -z),
+           extent: Math.abs(T.x0) - 4, attribution: data.attribution };
+}
+
+function windowTexture() {
+  // 2 windows per 3.2 m bay per 2.9 m storey; a random subset glows warm at night
+  const S = 256, c = document.createElement('canvas'); c.width = c.height = S;
+  const g = c.getContext('2d');
+  g.fillStyle = '#ffffff'; g.fillRect(0, 0, S, S);
+  g.strokeStyle = 'rgba(0,0,0,.10)';
+  for (let y = 0; y < S; y += 9) { g.beginPath(); g.moveTo(0, y); g.lineTo(S, y); g.stroke(); }
+  const wins = [[48, 70], [160, 70]];
+  g.fillStyle = '#20232a';
+  for (const [x, y] of wins) g.fillRect(x, y, 48, 96);
+  const glowC = document.createElement('canvas'); glowC.width = glowC.height = S;
+  const gg = glowC.getContext('2d'); gg.fillStyle = '#000'; gg.fillRect(0, 0, S, S);
+  gg.fillStyle = '#ffffff'; gg.fillRect(wins[0][0] + 4, wins[0][1] + 4, 40, 88);
+  const map = new THREE.CanvasTexture(c), glow = new THREE.CanvasTexture(glowC);
+  for (const t of [map, glow]) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; }
+  return { map, glow };
 }

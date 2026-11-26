@@ -11,7 +11,7 @@ THREE.Mesh.prototype.raycast = acceleratedRaycast;
 const EYE = 1.62, RADIUS = 0.28, STEP_UP = 0.42, WALK = 2.0, RUN = 4.5, GRAV = 18, JUMP = 5.2;
 const NO_COLLIDE = /Leaves|String_Lights|Flame|Hanger|Twine|Antlers|Hanging_Baskets|Ghost|Lawn/i;
 
-export function initWalk({ scene, camera, renderer, orbit, root, ui }) {
+export function initWalk({ scene, camera, renderer, orbit, root, ui, extraFloors = [], extraWalls = [], extent = 38 }) {
   // ---- collision set (static meshes, world-space BVH)
   const colliders = [];
   root.updateMatrixWorld(true);
@@ -20,9 +20,9 @@ export function initWalk({ scene, camera, renderer, orbit, root, ui }) {
     o.geometry.computeBoundsTree({ maxLeafTris: 8 });
     colliders.push(o);
   });
-  const ground = root.getObjectByName('Lawn');
-  const floorSet = ground ? [...colliders, ground] : colliders;
-  if (ground) ground.geometry.computeBoundsTree();
+  for (const m of [...extraFloors, ...extraWalls]) { m.updateMatrixWorld(true); m.geometry.computeBoundsTree({ maxLeafTris: 8 }); }
+  colliders.push(...extraWalls);
+  const floorSet = [...colliders, ...extraFloors];
 
   const ray = new THREE.Raycaster();
   ray.firstHitOnly = true;
@@ -135,8 +135,8 @@ export function initWalk({ scene, camera, renderer, orbit, root, ui }) {
       step.addScaledVector(n, -step.dot(n));       // slide along the wall
     }
     // keep inside the neighbourhood
-    state.feet.x = THREE.MathUtils.clamp(state.feet.x, -38, 38);
-    state.feet.z = THREE.MathUtils.clamp(state.feet.z, -38, 30);
+    state.feet.x = THREE.MathUtils.clamp(state.feet.x, -extent, extent);
+    state.feet.z = THREE.MathUtils.clamp(state.feet.z, -extent, extent);
 
     // vertical: step up onto stairs, fall with gravity
     const floor = floorAt(state.feet, STEP_UP + 0.05);

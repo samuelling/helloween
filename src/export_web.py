@@ -57,6 +57,24 @@ for ob in list(s.objects):
         bpy.data.objects.remove(ob)
 bpy.context.view_layer.update()
 
+# the web build drops the synthetic lawn/street (real terrain + aerial replace them) and trims the
+# sidewalk and curbs to the lot so they meet the real ground
+import bmesh
+for name in ("Lawn", "Street"):
+    if name in bpy.data.objects:
+        bpy.data.objects.remove(bpy.data.objects[name])
+for name in ("Walk_and_Sidewalk", "Curbs", "Fallen_Leaves"):
+    ob = bpy.data.objects.get(name)
+    if not ob:
+        continue
+    bm = bmesh.new(); bm.from_mesh(ob.data)
+    for x, nrm in ((-10.5, (-1, 0, 0)), (10.5, (1, 0, 0))):
+        geom = bm.verts[:] + bm.edges[:] + bm.faces[:]
+        bmesh.ops.bisect_plane(bm, geom=geom, plane_co=(x, 0, 0), plane_no=nrm, clear_outer=True)
+    if name == "Fallen_Leaves":   # leaves that sat on the old street surface
+        bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.z < -0.05], context="VERTS")
+    bm.to_mesh(ob.data); bm.free()
+
 # drivers would re-evaluate emission on export; freeze them at their night values
 for m in bpy.data.materials:
     if m.node_tree and m.node_tree.animation_data:

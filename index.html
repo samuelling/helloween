@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Helloween · our Halloween 2026 yard in 3D</title>
+<style>
+  :root { --bg:#07070b; --ink:#eee6df; --dim:#8d8580; --red:#ff3b2a; --line:#2a2226; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--ink);
+    font:15px/1.5 "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; }
+  a { color:var(--red); }
+  #stage { position:relative; height:100vh; min-height:520px; overflow:hidden; }
+  #stage canvas { display:block; width:100%; height:100%; }
+  #photo { position:absolute; inset:0; margin:auto; height:100%; opacity:0; pointer-events:none;
+    transition:opacity .35s; mix-blend-mode:normal; }
+  header { position:absolute; left:22px; top:18px; pointer-events:none; text-shadow:0 1px 8px #000; }
+  header h1 { margin:0; font-size:44px; letter-spacing:.02em; font-weight:600;
+    font-family:"Chiller","Papyrus",Georgia,serif; color:var(--red); }
+  header p { margin:0; color:var(--dim); font-style:italic; }
+  #panel { position:absolute; right:16px; top:16px; width:270px; padding:14px 16px 10px;
+    background:rgba(10,8,10,.78); border:1px solid var(--line); border-radius:10px;
+    backdrop-filter:blur(6px); font:13px/1.4 system-ui,-apple-system,sans-serif; }
+  #panel h3 { margin:2px 0 8px; font:600 11px system-ui; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--dim); }
+  #views { display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:12px; }
+  #views button { all:unset; cursor:pointer; padding:5px 7px; border:1px solid var(--line); border-radius:6px;
+    font-size:12px; color:var(--ink); background:#120e10; text-align:center; }
+  #views button:hover, #views button.on { border-color:var(--red); color:#fff; }
+  label { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:6px 0; }
+  input[type=range] { width:130px; accent-color:var(--red); }
+  input[type=color] { width:44px; height:24px; border:none; background:none; padding:0; }
+  #hint { position:absolute; left:22px; bottom:16px; color:var(--dim); font:12px system-ui; }
+  #loading { position:absolute; inset:0; display:grid; place-items:center; color:var(--dim);
+    font:italic 18px Georgia; }
+  main { max-width:1100px; margin:0 auto; padding:50px 22px 80px; }
+  h2 { font-weight:500; font-size:26px; margin:40px 0 6px; }
+  .lede { color:var(--dim); max-width:720px; }
+  .pairs { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:18px; margin-top:20px; }
+  figure { margin:0; }
+  .pair { display:grid; grid-template-columns:1fr 1fr; gap:3px; }
+  .pair img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; border-radius:3px; cursor:zoom-in; }
+  figcaption { font:12px system-ui; color:var(--dim); margin-top:5px; }
+  .dl { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+  .dl a { text-decoration:none; padding:9px 14px; border:1px solid var(--red); border-radius:8px;
+    font:600 13px system-ui; }
+  .dl a:hover { background:var(--red); color:#000; }
+  code { font-size:13px; color:#d9c7bb; }
+  #lightbox { position:fixed; inset:0; background:rgba(0,0,0,.92); display:none; place-items:center; z-index:9; }
+  #lightbox img { max-width:96vw; max-height:94vh; }
+  @media (max-width:700px) {
+    #panel { left:10px; right:10px; top:auto; bottom:10px; width:auto; max-height:46vh; overflow:auto; }
+    header h1 { font-size:34px; } #hint { display:none; }
+  }
+</style>
+</head>
+<body>
+<section id="stage">
+  <div id="loading">Raising the dead…</div>
+  <img id="photo" alt="">
+  <header><h1>Helloween</h1><p>Our Watertown yard, Halloween 2026, rebuilt in Blender</p></header>
+  <div id="panel">
+    <h3>Views (matched to photos)</h3>
+    <div id="views"></div>
+    <label><span>Show the photo</span><input type="checkbox" id="showPhoto"></label>
+    <h3 style="margin-top:12px">Lighting</h3>
+    <label>Night ↔ Day <input type="range" id="day" min="0" max="1" step="0.01" value="0"></label>
+    <label>Red lights <input type="range" id="redPower" min="0" max="3" step="0.01" value="1"></label>
+    <label>Colour <input type="color" id="redColor" value="#ff0904"></label>
+    <label>Glow <input type="range" id="bloom" min="0" max="2" step="0.01" value="0.9"></label>
+    <label>Exposure <input type="range" id="exposure" min="0.2" max="3" step="0.01" value="1"></label>
+  </div>
+  <div id="hint">drag to orbit · scroll to zoom · right-drag to pan</div>
+</section>
+
+<main>
+  <h2>Renders next to the real thing</h2>
+  <p class="lede">Each Cycles render (left) comes from a Blender camera placed to match one of our photos (right).
+    The scene is procedural: Python builds the house, porch, cairn, mannequins and all twelve skeletons.
+    Every skeleton has its own rig, so you can repose them in Blender.</p>
+  <div class="pairs" id="pairs"></div>
+
+  <h2>Take it apart</h2>
+  <p class="lede">The <code>.blend</code> is fully editable. Select <code>Scene_Controls</code> to change the red colour,
+    turn the candles and windows up or down, or slide from night to day. Every camera shows its reference photo as a background.
+    The build scripts recreate the scene from scratch: change a number and run
+    <code>python3 build_scene.py</code> with Blender 5.x.</p>
+  <div class="dl">
+    <a href="blend/helloween.blend" download>helloween.blend (Blender 5.3)</a>
+    <a href="scene.glb" download>scene.glb</a>
+    <a href="https://github.com/samuelling/helloween/tree/main/src">build scripts</a>
+  </div>
+</main>
+<div id="lightbox"><img alt=""></div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const LABELS = {
+  Cam_01_Street_Wide: 'From the street', Cam_02_Yard_Front: 'Front yard', Cam_03_Ritual: 'The circle',
+  Cam_04_Horned_Figure: 'On the steps', Cam_05_Low_Angle: 'Looking up', Cam_06_Horns_Closeup: 'The horns',
+  Cam_07_Jawbone_Girl: 'Jawbone girl', Cam_08_Overhead: 'From above'
+};
+const PUBLIC_PHOTOS = new Set(['IMG_9899.jpeg','IMG_0134.jpeg','IMG_0135.jpeg','IMG_0136.jpeg',
+  'IMG_0137.jpeg','IMG_0138.jpeg','IMG_0140.jpeg']);
+
+const stage = document.getElementById('stage');
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.AgXToneMapping;
+stage.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+const NIGHT_BG = new THREE.Color(0x020309), DAY_BG = new THREE.Color(0x8fb3e8);
+scene.background = NIGHT_BG.clone();
+const camera = new THREE.PerspectiveCamera(60, 1, 0.05, 400);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI * 0.495;
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.9, 0.5, 0.82);
+composer.addPass(bloom);
+composer.addPass(new OutputPass());
+
+const hemi = new THREE.HemisphereLight(0xbfd4ff, 0x2a2018, 0);
+scene.add(hemi);
+const K_SPOT = 0.9, K_SUN = 1.6;
+const lights = [];
+let info;
+
+function resize() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  renderer.setSize(w, h); composer.setSize(w, h);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize);
+
+const draco = new DRACOLoader().setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+const loader = new GLTFLoader().setDRACOLoader(draco);
+
+Promise.all([fetch('scene.json').then(r => r.json()), loader.loadAsync('scene.glb')]).then(([json, gltf]) => {
+  info = json;
+  gltf.scene.traverse(o => {
+    if (o.isMesh) {
+      o.castShadow = true; o.receiveShadow = true;
+      const m = o.material;
+      if (m && m.emissiveIntensity > 0 && m.emissive && m.emissive.getHex() !== 0) o.castShadow = false;
+    }
+  });
+  scene.add(gltf.scene);
+  for (const L of info.lights) {
+    let l;
+    const col = new THREE.Color().setRGB(...L.color);
+    if (L.type === 'SPOT' || L.type === 'POINT') {
+      const cd = L.watts / (4 * Math.PI) * K_SPOT;
+      l = L.type === 'SPOT'
+        ? new THREE.SpotLight(col, cd, 0, L.angle, Math.min(1, L.blend + 0.2), 2)
+        : new THREE.PointLight(col, cd, 0, 2);
+      if (L.type === 'SPOT') { l.target.position.set(...L.target); scene.add(l.target); }
+      if (L.name.startsWith('Red_Wash')) {
+        l.castShadow = true; l.shadow.mapSize.set(2048, 2048); l.shadow.bias = -0.0004;
+      }
+    } else if (L.type === 'SUN') {
+      l = new THREE.DirectionalLight(col, 0);
+      l.target.position.set(0, 4, 0); scene.add(l.target);
+      if (L.name === 'Day_Sun') {
+        l.castShadow = true; l.shadow.mapSize.set(2048, 2048);
+        Object.assign(l.shadow.camera, { left: -16, right: 16, top: 16, bottom: -16, near: 1, far: 90 });
+        l.shadow.bias = -0.0005;
+      }
+    }
+    if (!l) continue;
+    if (L.type !== 'SUN') l.position.set(...L.pos);
+    if (L.type === 'SUN') {
+      const dir = new THREE.Vector3(...L.target).sub(new THREE.Vector3(...L.pos)).normalize();
+      l.position.copy(new THREE.Vector3(0, 4, 0).addScaledVector(dir, -40));
+    }
+    l.userData = L;
+    scene.add(l); lights.push(l);
+  }
+  buildViews(); buildPairs(); applyLighting(); resize();
+  goTo(info.cameras[0], false);
+  document.getElementById('loading').remove();
+  renderer.setAnimationLoop(() => { controls.update(); tween(); composer.render(); });
+}).catch(e => { document.getElementById('loading').textContent = 'Could not load the scene: ' + e; });
+
+// ------------------------------------------------------------ lighting controls
+const $ = id => document.getElementById(id);
+function applyLighting() {
+  const d = +$('day').value, p = +$('redPower').value;
+  const rc = new THREE.Color($('redColor').value);
+  for (const l of lights) {
+    const L = l.userData;
+    if (L.red) { l.color.copy(rc); l.intensity = L.watts / (4 * Math.PI) * K_SPOT * p * (1 - d); }
+    else if (L.name === 'Day_Sun') l.intensity = 4.5 * K_SUN * d;
+    else if (L.name === 'Night_Street_Fill') l.intensity = 0.25 * K_SUN * (1 - d);
+    else if (L.type === 'POINT') l.intensity = L.watts / (4 * Math.PI) * K_SPOT * (1 - 0.8 * d);
+  }
+  hemi.intensity = 0.06 * (1 - d) + 1.1 * d;
+  scene.background.copy(NIGHT_BG).lerp(DAY_BG, d);
+  bloom.strength = +$('bloom').value * (1 - 0.8 * d);
+  renderer.toneMappingExposure = +$('exposure').value;
+}
+for (const id of ['day', 'redPower', 'redColor', 'bloom', 'exposure']) $(id).addEventListener('input', applyLighting);
+
+// ------------------------------------------------------------ camera presets
+let anim = null, current = null;
+function goTo(c, smooth = true) {
+  current = c;
+  document.querySelectorAll('#views button').forEach(b => b.classList.toggle('on', b.dataset.cam === c.name));
+  const to = { pos: new THREE.Vector3(...c.pos), tgt: new THREE.Vector3(...c.target), fov: c.vfov };
+  if (!smooth) { camera.position.copy(to.pos); controls.target.copy(to.tgt); camera.fov = to.fov;
+    camera.updateProjectionMatrix(); return updatePhoto(); }
+  anim = { t0: performance.now(), from: { pos: camera.position.clone(), tgt: controls.target.clone(), fov: camera.fov }, to };
+  updatePhoto();
+}
+function tween() {
+  if (!anim) return;
+  let t = Math.min(1, (performance.now() - anim.t0) / 1400); const e = t < .5 ? 4*t*t*t : 1 - (-2*t+2)**3/2;
+  camera.position.lerpVectors(anim.from.pos, anim.to.pos, e);
+  controls.target.lerpVectors(anim.from.tgt, anim.to.tgt, e);
+  camera.fov = anim.from.fov + (anim.to.fov - anim.from.fov) * e; camera.updateProjectionMatrix();
+  if (t >= 1) anim = null;
+}
+function updatePhoto() {
+  const img = $('photo'), ok = current && PUBLIC_PHOTOS.has(current.photo);
+  if (ok) img.src = 'photos/' + current.photo.replace('.jpeg', '.jpg');
+  img.style.opacity = ($('showPhoto').checked && ok) ? 0.55 : 0;
+}
+$('showPhoto').addEventListener('change', updatePhoto);
+controls.addEventListener('start', () => { anim = null; });
+function buildViews() {
+  const box = $('views');
+  for (const c of info.cameras) {
+    const b = document.createElement('button');
+    b.textContent = LABELS[c.name] || c.name; b.dataset.cam = c.name;
+    b.onclick = () => goTo(c); box.appendChild(b);
+  }
+}
+
+// ------------------------------------------------------------ gallery
+function buildPairs() {
+  const box = $('pairs');
+  const shots = [['Cam_01_Street_Wide','IMG_9899'],['Cam_03_Ritual','IMG_0134'],['Cam_04_Horned_Figure','IMG_0135'],
+    ['Cam_05_Low_Angle','IMG_0137'],['Cam_08_Overhead','IMG_0140'],['Cam_07_Jawbone_Girl','IMG_0138'],
+    ['Cam_01_Street_Wide','day'],['Cam_03_Ritual','day']];
+  for (const [r, p] of shots) {
+    const f = document.createElement('figure');
+    const right = p === 'day' ? `renders/${r}_day.jpg` : `photos/${p}.jpg`;
+    f.innerHTML = `<div class="pair"><img loading="lazy" src="renders/${r}.jpg" alt="render">` +
+      `<img loading="lazy" src="${right}" alt=""></div>` +
+      `<figcaption>${LABELS[r]} · ${p === 'day' ? 'night and day' : 'render vs photo'}</figcaption>`;
+    box.appendChild(f);
+  }
+  box.addEventListener('click', e => { if (e.target.tagName === 'IMG') {
+    $('lightbox').querySelector('img').src = e.target.src; $('lightbox').style.display = 'grid'; } });
+  $('lightbox').onclick = () => $('lightbox').style.display = 'none';
+}
+</script>
+</body>
+</html>

@@ -213,7 +213,7 @@ export function initDecorator(ctx) {
       wrap.add(fogPatch(wrap.userData));
     } else if (d.type === 'bloodmoon') {
       const m = new THREE.Mesh(new THREE.SphereGeometry(0.22, 20, 14), new THREE.MeshStandardMaterial({ color: 0x220000, emissive: 0xc01208, emissiveIntensity: 2 }));
-      m.position.y = 1.5; wrap.add(m);
+      m.position.y = 1.5; wrap.add(m); wrap.userData.markerOnly = true;
       ensureMoon();
     } else if (d.type === 'chant') {
       const st = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.16, 0.9, 6), new THREE.MeshStandardMaterial({ color: 0x0a0a0c, roughness: 0.3, metalness: 0.4 }));
@@ -223,7 +223,7 @@ export function initDecorator(ctx) {
       if (!s.ghost) startChant(wrap);
     } else if (d.type === 'lightning') {
       const bolt = new THREE.Mesh(new THREE.OctahedronGeometry(0.25), new THREE.MeshStandardMaterial({ color: 0x223, emissive: 0x8fb0ff, emissiveIntensity: 2 }));
-      bolt.position.y = 1.5; wrap.add(bolt);
+      bolt.position.y = 1.5; wrap.add(bolt); wrap.userData.markerOnly = true;
       ensureLightning();
     }
     wrap.traverse(o => { if (o.isMesh) { o.castShadow = false; } });
@@ -293,7 +293,7 @@ export function initDecorator(ctx) {
     const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(cv), fog: false, depthWrite: false, blending: THREE.AdditiveBlending }));
     halo.scale.setScalar(60);
     moon.add(disc, halo);
-    moon.position.set(-35, 55, -150);
+    moon.position.set(-75, 38, -125);
     const ml = new THREE.DirectionalLight(0xff2a10, 0); ml.position.copy(moon.position); moon.userData.light = ml;
     scene.add(moon, ml); moon.visible = false;
   }
@@ -706,6 +706,8 @@ export function initDecorator(ctx) {
     const t = clock.getElapsedTime();
     if (jointGroup.parent) jointGroup.children.forEach(s => s.userData.follow.getWorldPosition(s.position));
     moonTick();
+    const dec = document.body.classList.contains('decorating');
+    for (const o of decor.children) if (o.userData.markerOnly) o.visible = dec;
     for (const o of decor.children) {
       const u = o.userData;
       if (u.kind === 'prop') propBehaviours(o, u, t);

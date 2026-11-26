@@ -30,6 +30,17 @@
   label { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:6px 0; }
   input[type=range] { width:130px; accent-color:var(--red); }
   input[type=color] { width:44px; height:24px; border:none; background:none; padding:0; }
+  #walkBtn { all:unset; cursor:pointer; display:block; text-align:center; margin:0 0 12px; padding:9px 0;
+    border-radius:8px; background:var(--red); color:#000; font:700 14px system-ui; letter-spacing:.03em; }
+  #walkBtn:hover { filter:brightness(1.15); }
+  #walkHelp { position:absolute; left:50%; bottom:22px; transform:translateX(-50%); display:none; padding:8px 14px;
+    background:rgba(0,0,0,.55); border-radius:8px; font:12px system-ui; color:#d8cfc8; white-space:nowrap; }
+  #crosshair { position:absolute; left:50%; top:50%; width:4px; height:4px; margin:-2px; border-radius:50%;
+    background:rgba(255,255,255,.6); display:none; pointer-events:none; }
+  #paused { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:none; padding:16px 26px;
+    background:rgba(0,0,0,.7); border:1px solid var(--red); border-radius:10px; font:italic 20px Georgia; color:#eee; cursor:pointer; }
+  body.walking header, body.walking #hint { display:none; }
+  body.walking #walkHelp, body.walking #crosshair { display:block; }
   #hint { position:absolute; left:22px; bottom:16px; color:var(--dim); font:12px system-ui; }
   #loading { position:absolute; inset:0; display:grid; place-items:center; color:var(--dim);
     font:italic 18px Georgia; }
@@ -60,6 +71,7 @@
   <img id="photo" alt="">
   <header><h1>Helloween</h1><p>Our Watertown yard, Halloween 2026, rebuilt in Blender</p></header>
   <div id="panel">
+    <button id="walkBtn">🚶 Walk around</button>
     <h3>Views (matched to photos)</h3>
     <div id="views"></div>
     <label><span>Show the photo</span><input type="checkbox" id="showPhoto"></label>
@@ -71,6 +83,9 @@
     <label>Exposure <input type="range" id="exposure" min="0.2" max="3" step="0.01" value="0.75"></label>
   </div>
   <div id="hint">drag to orbit · scroll to zoom · right-drag to pan</div>
+  <div id="crosshair"></div>
+  <div id="walkHelp">WASD / arrows move · mouse looks · Shift run · Space jump · F flashlight · Esc for menu</div>
+  <div id="paused">Click to keep walking</div>
 </section>
 
 <main>
@@ -108,6 +123,8 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { initWalk } from './walk.js';
+import { addNeighborhood } from './neighborhood.js';
 
 const LABELS = {
   Cam_01_Street_Wide: 'From the street', Cam_02_Yard_Front: 'Front yard', Cam_03_Ritual: 'The circle',
@@ -128,6 +145,7 @@ stage.prepend(renderer.domElement);
 const scene = new THREE.Scene();
 const NIGHT_BG = new THREE.Color(0x020309), DAY_BG = new THREE.Color(0x8fb3e8);
 scene.background = NIGHT_BG.clone();
+scene.fog = new THREE.FogExp2(0x020309, 0.022);
 const camera = new THREE.PerspectiveCamera(60, 1, 0.05, 400);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
@@ -144,7 +162,7 @@ scene.add(hemi);
 const K_SPOT = 3.2, K_SUN = 1.6, EMIT_K = 0.1;
 const GROUP = { Red_Stake_Spot: 0.16, Red_Uplight_Small: 0.45, Red_Wash_Porch: 1.0 };
 const lights = [];
-let info;
+let info, walk;
 
 function resize() {
   const w = stage.clientWidth, h = stage.clientHeight;
@@ -169,6 +187,11 @@ Promise.all([fetch('scene.json').then(r => r.json()), loader.loadAsync('scene.gl
     }
   });
   scene.add(gltf.scene);
+  addNeighborhood(scene);
+  walk = initWalk({ scene, camera, renderer, orbit: controls, root: gltf.scene, ui: {
+    onWalk: on => { document.body.classList.toggle('walking', on); $('walkBtn').textContent = on ? '✕ Stop walking' : '🚶 Walk around';
+                    $('paused').style.display = 'none'; },
+    onPaused: () => { $('paused').style.display = 'grid'; } } });
   for (const L of info.lights) {
     let l;
     const col = new THREE.Color().setRGB(...L.color);
@@ -203,7 +226,13 @@ Promise.all([fetch('scene.json').then(r => r.json()), loader.loadAsync('scene.gl
   buildViews(); buildPairs(); applyLighting(); resize();
   goTo(info.cameras[0], false);
   document.getElementById('loading').remove();
-  renderer.setAnimationLoop(() => { controls.update(); tween(); composer.render(); });
+  const clock = new THREE.Clock();
+  renderer.setAnimationLoop(() => {
+    const dt = clock.getDelta();
+    if (walk && walk.on) walk.update(dt); else { controls.update(); tween(); }
+    composer.render();
+  });
+  if (location.hash === '#walk') walk.enter();
 }).catch(e => { document.getElementById('loading').textContent = 'Could not load the scene: ' + e; });
 
 // ------------------------------------------------------------ lighting controls
@@ -220,6 +249,10 @@ function applyLighting() {
   }
   hemi.intensity = 0.025 * (1 - d) + 1.1 * d;
   scene.background.copy(NIGHT_BG).lerp(DAY_BG, d);
+  scene.fog.color.copy(scene.background);
+  scene.fog.density = 0.022 * (1 - d) + 0.004 * d;
+  scene.userData.day = d;
+  scene.traverse(o => { if (o.userData.nightGlow) o.material.emissiveIntensity = o.userData.nightGlow * (1 - 0.9 * d); });
   bloom.strength = +$('bloom').value * (1 - 0.8 * d);
   renderer.toneMappingExposure = +$('exposure').value;
 }
@@ -228,6 +261,7 @@ for (const id of ['day', 'redPower', 'redColor', 'bloom', 'exposure']) $(id).add
 // ------------------------------------------------------------ camera presets
 let anim = null, current = null;
 function goTo(c, smooth = true) {
+  if (walk && walk.on) walk.exit();
   current = c;
   document.querySelectorAll('#views button').forEach(b => b.classList.toggle('on', b.dataset.cam === c.name));
   const to = { pos: new THREE.Vector3(...c.pos), tgt: new THREE.Vector3(...c.target), fov: c.vfov };
@@ -250,6 +284,9 @@ function updatePhoto() {
   img.style.opacity = ($('showPhoto').checked && ok) ? 0.55 : 0;
 }
 $('showPhoto').addEventListener('change', updatePhoto);
+$('walkBtn').addEventListener('click', () => walk && (walk.on ? walk.exit() : walk.enter()));
+$('paused').addEventListener('click', () => { $('paused').style.display = 'none'; walk.lock(); });
+addEventListener('keydown', e => { if (e.code === 'KeyQ' && walk?.on) walk.exit(); });
 controls.addEventListener('start', () => { anim = null; });
 function buildViews() {
   const box = $('views');

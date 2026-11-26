@@ -16,6 +16,10 @@ const LIGHTS = {
   torch:    { name: 'Tiki torch', icon: '🔥', type: 'point', color: '#ff8a2a', intensity: 18, torch: true, effect: 'flicker', desc: 'Flickering firelight on a pole.' },
   strobe:   { name: 'Strobe', icon: '⚡', type: 'spot', color: '#ffffff', intensity: 900, angle: 50, penumbra: 0.3, effect: 'strobe', desc: 'Strobe flash.' },
   cycle:    { name: 'Colour wash', icon: '🌈', type: 'spot', color: '#ff00aa', intensity: 500, angle: 45, penumbra: 0.6, effect: 'cycle', desc: 'Wash that slowly cycles hue.' },
+  hellfire: { name: 'Hellfire pit', icon: '🔥', type: 'point', color: '#ff2e08', intensity: 45, pit: true, effect: 'flicker', desc: 'Glowing pit of coals that throws a low, red, flickering light.' },
+  blacklight:{ name: 'Blacklight', icon: '🟣', type: 'spot', color: '#6a1cff', intensity: 450, angle: 40, penumbra: 0.6, desc: 'Violet UV-style wash. Bone and pale robes glow under it.' },
+  bloodmoon:{ name: 'Blood moon', icon: '🌑', type: 'bloodmoon', desc: 'Huge red moon over the house; turns the night sky and fog crimson.' },
+  chant:    { name: 'Coven chant', icon: '🕯️', type: 'chant', desc: 'Low droning choir that gets louder as you walk toward it. Click once to enable sound.' },
   lightning:{ name: 'Lightning storm', icon: '🌩️', type: 'lightning', desc: 'Random lightning flashes across the whole sky.' },
   fog:      { name: 'Ground fog', icon: '🌫️', type: 'fog', color: '#b9c2d0', radius: 3, desc: 'A low patch of drifting fog.' },
 };
@@ -102,12 +106,12 @@ export function initDecorator(ctx) {
   }
 
   // ------------------------------------------------------------------ catalog + drawer
-  let tab = 'Bones';
+  let tab = 'Occult';
   async function loadCatalog() {
     const c = await fetch('props/catalog.json?v=11').then(r => r.json());
     Object.assign(catalog, c);
     const cats = [...new Set(Object.values(c).map(p => p.cat))];
-    const order = ['Bones', 'Creatures', 'Ghouls', 'Graveyard', 'Spooky stuff', 'Lights', 'Effects', '2026 display'];
+    const order = ['Occult', 'Bones', 'Creatures', 'Ghouls', 'Graveyard', 'Spooky stuff', 'Lights', 'Effects', '2026 display'];
     const tabs = order.filter(t => cats.includes(t) || t === 'Lights' || t === 'Effects');
     panel.querySelector('.tabs').innerHTML = tabs.map(t => `<span data-t="${t}">${t}</span>`).join('');
     panel.querySelectorAll('.tabs span').forEach(s => s.onclick = () => { tab = s.dataset.t; drawGrid(); });
@@ -117,8 +121,9 @@ export function initDecorator(ctx) {
     panel.querySelectorAll('.tabs span').forEach(s => s.classList.toggle('on', s.dataset.t === tab));
     const g = panel.querySelector('.grid');
     let items;
-    if (tab === 'Lights') items = Object.entries(LIGHTS).filter(([k, v]) => !['fog', 'lightning'].includes(k));
-    else if (tab === 'Effects') items = Object.entries(LIGHTS).filter(([k]) => ['fog', 'lightning'].includes(k));
+    const FX = ['fog', 'lightning', 'bloodmoon', 'chant'];
+    if (tab === 'Lights') items = Object.entries(LIGHTS).filter(([k]) => !FX.includes(k));
+    else if (tab === 'Effects') items = Object.entries(LIGHTS).filter(([k]) => FX.includes(k));
     else items = Object.entries(catalog).filter(([, p]) => p.cat === tab);
     g.innerHTML = items.map(([k, p]) => `<div class="item" data-k="${k}" title="${(p.desc || '').replace(/"/g, '')}">` +
       (p.thumb ? `<img src="${p.thumb}" loading="lazy">` : `<div class="ic">${p.icon}</div>`) +
@@ -182,7 +187,19 @@ export function initDecorator(ctx) {
     } else if (d.type === 'point') {
       const L = new THREE.PointLight(d.color, d.intensity, 0, 2);
       wrap.add(L); wrap.userData.light = L;
-      if (d.orb) {
+      if (d.pit) {
+        const coals = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.6, 0.08, 24),
+          new THREE.MeshStandardMaterial({ color: 0x150404, emissive: 0xff2a00, emissiveIntensity: 1.6, roughness: 1 }));
+        coals.position.y = 0.04; wrap.add(coals); wrap.userData.coals = coals;
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.09, 8, 24), new THREE.MeshStandardMaterial({ color: 0x1b1a1a, roughness: 0.9 }));
+        ring.rotation.x = Math.PI / 2; ring.position.y = 0.06; wrap.add(ring);
+        for (let i = 0; i < 7; i++) {
+          const f = new THREE.Mesh(new THREE.ConeGeometry(0.07 + Math.random() * 0.05, 0.3 + Math.random() * 0.35, 8), lens);
+          const a = Math.random() * 6.28, r = Math.random() * 0.35;
+          f.position.set(Math.cos(a) * r, 0.2, Math.sin(a) * r); f.userData.flick = Math.random() * 10; wrap.add(f);
+        }
+        L.position.y = 0.5;
+      } else if (d.orb) {
         const s1 = new THREE.Mesh(new THREE.SphereGeometry(0.12, 24, 16), lens); s1.position.y = 1.3; wrap.add(s1);
         L.position.y = 1.3;
       } else {
@@ -194,6 +211,16 @@ export function initDecorator(ctx) {
       }
     } else if (d.type === 'fog') {
       wrap.add(fogPatch(wrap.userData));
+    } else if (d.type === 'bloodmoon') {
+      const m = new THREE.Mesh(new THREE.SphereGeometry(0.22, 20, 14), new THREE.MeshStandardMaterial({ color: 0x220000, emissive: 0xc01208, emissiveIntensity: 2 }));
+      m.position.y = 1.5; wrap.add(m);
+      ensureMoon();
+    } else if (d.type === 'chant') {
+      const st = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.16, 0.9, 6), new THREE.MeshStandardMaterial({ color: 0x0a0a0c, roughness: 0.3, metalness: 0.4 }));
+      st.position.y = 0.45; wrap.add(st);
+      const fl = new THREE.Mesh(new THREE.SphereGeometry(0.03, 8, 6), new THREE.MeshStandardMaterial({ color: 0x111, emissive: 0xff8a30, emissiveIntensity: 4 }));
+      fl.position.y = 0.95; wrap.add(fl);
+      if (!s.ghost) startChant(wrap);
     } else if (d.type === 'lightning') {
       const bolt = new THREE.Mesh(new THREE.OctahedronGeometry(0.25), new THREE.MeshStandardMaterial({ color: 0x223, emissive: 0x8fb0ff, emissiveIntensity: 2 }));
       bolt.position.y = 1.5; wrap.add(bolt);
@@ -254,6 +281,66 @@ export function initDecorator(ctx) {
     flash = { next: 2, until: 0, bursts: 0 };
   }
 
+  // ---- blood moon: a huge red moon behind the house, crimson sky and fog while any marker exists
+  let moon = null, moonSaved = null;
+  function ensureMoon() {
+    if (moon) return;
+    moon = new THREE.Group();
+    const disc = new THREE.Mesh(new THREE.SphereGeometry(9, 40, 24), new THREE.MeshBasicMaterial({ color: 0xb3200c, fog: false }));
+    const cv = document.createElement('canvas'); cv.width = cv.height = 128;
+    const g = cv.getContext('2d'), gr = g.createRadialGradient(64, 64, 20, 64, 64, 64);
+    gr.addColorStop(0, 'rgba(255,60,20,.55)'); gr.addColorStop(1, 'rgba(255,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
+    const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(cv), fog: false, depthWrite: false, blending: THREE.AdditiveBlending }));
+    halo.scale.setScalar(60);
+    moon.add(disc, halo);
+    moon.position.set(-35, 55, -150);
+    const ml = new THREE.DirectionalLight(0xff2a10, 0); ml.position.copy(moon.position); moon.userData.light = ml;
+    scene.add(moon, ml); moon.visible = false;
+  }
+  function moonTick() {
+    if (!moon) return;
+    const on = decor.children.some(o => o.userData.lkind === 'bloodmoon');
+    if (on && !moon.visible) { moonSaved = { bg: scene.background.clone(), fog: scene.fog.color.clone() }; }
+    moon.visible = on; moon.userData.light.intensity = on ? 0.9 : 0;
+    if (on) { scene.background.setRGB(0.05, 0.004, 0.004); scene.fog.color.setRGB(0.08, 0.006, 0.005); }
+    else if (moonSaved) { scene.background.copy(moonSaved.bg); scene.fog.color.copy(moonSaved.fog); moonSaved = null; }
+  }
+
+  // ---- coven chant: a synthesized droning choir as positional audio
+  let listener = null;
+  const audioOK = () => listener && listener.context.state === 'running';
+  function startChant(wrap) {
+    if (!listener) { listener = new THREE.AudioListener(); camera.add(listener); }
+    const ctxA = listener.context;
+    const out = ctxA.createGain(); out.gain.value = 0.0;
+    const voices = [];
+    const notes = [73.42, 110.0, 146.83, 174.61, 220.0];   // D minor stack
+    for (const [i, f] of notes.entries()) {
+      const o = ctxA.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f; o.detune.value = (Math.random() - 0.5) * 14;
+      const vib = ctxA.createOscillator(); vib.frequency.value = 4.5 + Math.random(); const vg = ctxA.createGain(); vg.gain.value = 3;
+      vib.connect(vg).connect(o.detune);
+      const g = ctxA.createGain(); g.gain.value = 0.12 / (1 + i * 0.4);
+      for (const [fq, q, amp] of [[650, 9, 1], [1080, 11, 0.5], [2650, 14, 0.15]]) {   // "ah" formants
+        const bp = ctxA.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = fq; bp.Q.value = q;
+        const ag = ctxA.createGain(); ag.gain.value = amp;
+        o.connect(bp).connect(ag).connect(g);
+      }
+      const swell = ctxA.createOscillator(); swell.frequency.value = 0.07 + i * 0.013; const sg = ctxA.createGain(); sg.gain.value = 0.06 / (1 + i * 0.4);
+      swell.connect(sg).connect(g.gain);
+      g.connect(out); voices.push(o, vib, swell);
+    }
+    const drone = ctxA.createOscillator(); drone.type = 'sine'; drone.frequency.value = 36.7;
+    const dg = ctxA.createGain(); dg.gain.value = 0.25; drone.connect(dg).connect(out); voices.push(drone);
+    voices.forEach(v => v.start());
+    const pa = new THREE.PositionalAudio(listener);
+    pa.setNodeSource(out); pa.setRefDistance(2.5); pa.setRolloffFactor(1.6); pa.setDistanceModel('inverse');
+    pa.position.y = 1; wrap.add(pa);
+    out.gain.setTargetAtTime(0.9, ctxA.currentTime + 0.1, 1.5);
+    wrap.userData.dispose = () => { try { voices.forEach(v => v.stop()); pa.disconnect(); } catch (e) {} };
+  }
+  const wakeAudio = () => { if (listener && listener.context.state !== 'running') listener.context.resume(); };
+  addEventListener('pointerdown', wakeAudio); addEventListener('keydown', wakeAudio);
+
   function applyLightProps(w) {
     const u = w.userData, L = u.light;
     if (u.lensMat) u.lensMat.emissive.set(u.color || '#fff');
@@ -283,7 +370,7 @@ export function initDecorator(ctx) {
     panel.querySelectorAll('.item').forEach(el => el.classList.toggle('on', el.dataset.k === key));
     hint.style.display = 'block';
     hint.textContent = 'Click to place · Shift-click to place several · Esc to cancel';
-    ghost = LIGHTS[key] ? makeLight(key) : await makeProp(key);
+    ghost = LIGHTS[key] ? makeLight(key, { ghost: true }) : await makeProp(key);
     if (placing !== key) return;
     ghost.traverse(o => { if (o.isMesh && o.material && !o.material.isShaderMaterial) { o.material = o.material.clone(); o.material.transparent = true; o.material.opacity = 0.55; } });
     ghost.visible = false;
@@ -294,7 +381,7 @@ export function initDecorator(ctx) {
     panel.querySelectorAll('.item').forEach(el => el.classList.remove('on'));
     if (ghost) { ghost.removeFromParent(); disposeLights(ghost); ghost = null; }
   }
-  function disposeLights(o) { o.traverse(x => { if (x.isLight && x.shadow?.map) x.shadow.map.dispose(); }); }
+  function disposeLights(o) { o.traverse(x => { if (x.isLight && x.shadow?.map) x.shadow.map.dispose(); }); o.userData.dispose?.(); }
 
   const el = renderer.domElement;
   let down = null;
@@ -304,17 +391,24 @@ export function initDecorator(ctx) {
     if (!h) { ghost.visible = false; return; }
     ghost.visible = true;
     ghost.position.copy(h.point);
-    const toCam = camera.position.clone().sub(h.point); toCam.y = 0;
-    ghost.rotation.set(0, Math.atan2(toCam.x, toCam.z), 0);
+    if (catalog[placing]?.decal && h.face) {
+      const n = h.face.normal.clone().transformDirection(h.object.matrixWorld);
+      if (n.dot(ray.ray.direction) > 0) n.negate();
+      ghost.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), n);
+      ghost.position.addScaledVector(n, 0.012);
+    } else {
+      const toCam = camera.position.clone().sub(h.point); toCam.y = 0;
+      ghost.rotation.set(0, Math.atan2(toCam.x, toCam.z), 0);
+    }
   });
   el.addEventListener('pointerdown', e => { down = { x: e.clientX, y: e.clientY }; });
   el.addEventListener('pointerup', async e => {
     if (!document.body.classList.contains('decorating') || !down) return;
     if (Math.hypot(e.clientX - down.x, e.clientY - down.y) > 5 || tc.dragging) return;
     if (placing && ghost && ghost.visible) {
-      const key = placing, pos = ghost.position.clone(), rot = ghost.rotation.y;
+      const key = placing, pos = ghost.position.clone(), q = ghost.quaternion.clone();
       const obj = LIGHTS[key] ? makeLight(key) : await makeProp(key);
-      obj.position.copy(pos); obj.rotation.y = rot;
+      obj.position.copy(pos); obj.quaternion.copy(q);
       if (obj.userData.kind === 'light' && obj.userData.head && !LIGHTS[key].up) aimAtHouse(obj);
       decor.add(obj);
       if (obj.userData.rig) groundSnap(obj);
@@ -372,7 +466,7 @@ export function initDecorator(ctx) {
     }
     if (u.kind === 'light') {
       const L = LIGHTS[u.lkind];
-      if (L.type !== 'lightning') h += `<div class="row">Colour <input type="color" data-p="color" value="${u.color}"></div>`;
+      if (u.light || L.type === 'fog') h += `<div class="row">Colour <input type="color" data-p="color" value="${u.color}"></div>`;
       if (u.light) {
         h += `<div class="row">Brightness <input type="range" data-p="intensity" min="0" max="${L.type === 'point' ? 120 : 2500}" step="1" value="${u.intensity}"></div>`;
         if (u.light.isSpotLight) h += `<div class="row">Cone angle <input type="range" data-p="angle" min="2" max="80" step="1" value="${u.angle}"></div>
@@ -428,6 +522,7 @@ export function initDecorator(ctx) {
   }
   function groundSnap(o) {
     if (o.userData.kind === 'light') { o.position.y = floorBelow(o.position) + (o.userData.head ? 0.12 : 0); return; }
+    if (catalog[o.userData.id]?.decal) return;
     o.updateMatrixWorld(true);
     const box = new THREE.Box3().setFromObject(o.userData.inner || o, true);
     const c = box.getCenter(new THREE.Vector3());
@@ -610,6 +705,7 @@ export function initDecorator(ctx) {
   function update() {
     const t = clock.getElapsedTime();
     if (jointGroup.parent) jointGroup.children.forEach(s => s.userData.follow.getWorldPosition(s.position));
+    moonTick();
     for (const o of decor.children) {
       const u = o.userData;
       if (u.kind === 'prop') propBehaviours(o, u, t);
@@ -630,6 +726,8 @@ export function initDecorator(ctx) {
     const inner = u.inner;
     if (b.includes('bob')) { inner.position.y = 0.15 + 0.12 * Math.sin(t * 1.3 + ph); inner.rotation.z = 0.06 * Math.sin(t * 0.9 + ph); }
     if (b.includes('swing')) inner.rotation.z = 0.05 * Math.sin(t * 1.1 + ph);
+    if (b.includes('sway_body')) { inner.rotation.z = 0.02 * Math.sin(t * 0.8 + ph); inner.rotation.x = 0.015 * Math.sin(t * 0.55 + ph * 2); }
+    if (b.includes('levitate')) { inner.position.y = 0.12 * Math.sin(t * 0.7 + ph); inner.rotation.y = 0.06 * Math.sin(t * 0.25 + ph); inner.rotation.z = 0.03 * Math.sin(t * 0.4); }
     if (b.includes('pulse') || b.includes('flicker')) {
       const k = b.includes('flicker') ? 0.75 + 0.25 * Math.sin(t * 13 + ph) * Math.sin(t * 7.3) + 0.1 * Math.random() : 0.65 + 0.35 * Math.sin(t * 2.2 + ph);
       if (u.propLight) u.propLight.intensity = u.baseIntensity * k;
@@ -667,6 +765,7 @@ export function initDecorator(ctx) {
     if (col) { L.color.copy(col); u.lensMat.emissive.copy(col); if (u.cone) u.cone.material.uniforms.color.value.copy(col); }
     if (u.lensMat && !col) u.lensMat.emissiveIntensity = 2 * k;
     if (u.flame) u.flame.scale.y = 0.8 + 0.3 * k;
+    if (u.coals) { u.coals.material.emissiveIntensity = 1.2 + 0.8 * k; o.children.forEach(c => { if (c.userData.flick !== undefined) c.scale.y = 0.6 + 0.6 * Math.abs(Math.sin(t * 7 + c.userData.flick)); }); }
   }
 
   // ------------------------------------------------------------------ boot

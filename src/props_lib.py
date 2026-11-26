@@ -1123,6 +1123,8 @@ def thumb(pid, lo, hi):
 
 
 if __name__ == "__main__":
+    from props_occult import OCCULT
+    PROPS.update(OCCULT)
     cat_path = os.path.join(OUT, "catalog.json")
     catalog = json.load(open(cat_path)) if os.path.exists(cat_path) else {}
     for pid, fn in PROPS.items():
@@ -1132,6 +1134,7 @@ if __name__ == "__main__":
             M = fresh()
             info = fn(M)
             catalog[pid] = finalize_and_export(pid, info)
+            catalog[pid]["order"] = list(PROPS).index(pid)
             print("PROP_OK", pid, catalog[pid]["kb"], "KB", catalog[pid]["tris"], "tris", flush=True)
         except Exception:
             print("PROP_FAIL", pid, flush=True)

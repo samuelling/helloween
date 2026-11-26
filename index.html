@@ -67,7 +67,7 @@
     <label>Night ↔ Day <input type="range" id="day" min="0" max="1" step="0.01" value="0"></label>
     <label>Red lights <input type="range" id="redPower" min="0" max="3" step="0.01" value="1"></label>
     <label>Colour <input type="color" id="redColor" value="#ff0904"></label>
-    <label>Glow <input type="range" id="bloom" min="0" max="2" step="0.01" value="0.9"></label>
+    <label>Glow <input type="range" id="bloom" min="0" max="2" step="0.01" value="0.5"></label>
     <label>Exposure <input type="range" id="exposure" min="0.2" max="3" step="0.01" value="1"></label>
   </div>
   <div id="hint">drag to orbit · scroll to zoom · right-drag to pan</div>
@@ -135,13 +135,13 @@ controls.maxPolarAngle = Math.PI * 0.495;
 
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
-const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.9, 0.5, 0.82);
+const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.35, 0.92);
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
 
 const hemi = new THREE.HemisphereLight(0xbfd4ff, 0x2a2018, 0);
 scene.add(hemi);
-const K_SPOT = 0.9, K_SUN = 1.6;
+const K_SPOT = 3.2, K_SUN = 1.6, EMIT_K = 0.1;
 const lights = [];
 let info;
 
@@ -161,7 +161,10 @@ Promise.all([fetch('scene.json').then(r => r.json()), loader.loadAsync('scene.gl
     if (o.isMesh) {
       o.castShadow = true; o.receiveShadow = true;
       const m = o.material;
-      if (m && m.emissiveIntensity > 0 && m.emissive && m.emissive.getHex() !== 0) o.castShadow = false;
+      if (m && m.emissive && m.emissive.getHex() !== 0) {
+        o.castShadow = false;
+        if (!m.userData.scaled) { m.emissiveIntensity *= EMIT_K; m.userData.scaled = true; }
+      }
     }
   });
   scene.add(gltf.scene);
@@ -210,10 +213,10 @@ function applyLighting() {
     const L = l.userData;
     if (L.red) { l.color.copy(rc); l.intensity = L.watts / (4 * Math.PI) * K_SPOT * p * (1 - d); }
     else if (L.name === 'Day_Sun') l.intensity = 4.5 * K_SUN * d;
-    else if (L.name === 'Night_Street_Fill') l.intensity = 0.25 * K_SUN * (1 - d);
+    else if (L.name === 'Night_Street_Fill') l.intensity = 0.05 * K_SUN * (1 - d);
     else if (L.type === 'POINT') l.intensity = L.watts / (4 * Math.PI) * K_SPOT * (1 - 0.8 * d);
   }
-  hemi.intensity = 0.06 * (1 - d) + 1.1 * d;
+  hemi.intensity = 0.025 * (1 - d) + 1.1 * d;
   scene.background.copy(NIGHT_BG).lerp(DAY_BG, d);
   bloom.strength = +$('bloom').value * (1 - 0.8 * d);
   renderer.toneMappingExposure = +$('exposure').value;

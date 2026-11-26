@@ -3,6 +3,7 @@
 // load or share the layout.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { initRig, applyPreset, presetsFor, capturePose, applyPose } from './poses.js?v=11';
@@ -31,7 +32,7 @@ const ORIGINAL_GROUPS = {
 
 export function initDecorator(ctx) {
   const { scene, camera, renderer, orbit, root: house, hood, redLights } = ctx;
-  const loader = new GLTFLoader();
+  const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
   const cache = {}, catalog = {};
   const decor = new THREE.Group(); decor.name = 'Decor'; scene.add(decor);
   const tc = new TransformControls(camera, renderer.domElement);

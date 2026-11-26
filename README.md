@@ -15,3 +15,14 @@ Our Watertown Halloween 2026 yard, rebuilt in Blender from photos. Live at **[li
 - `blend/helloween.blend`: the editable Blender 5.3 scene. Select `Scene_Controls` for the main knobs. Twelve skeletons are rigged and poseable, every camera shows its reference photo as a background, and a README is packed inside the file.
 - `src/`: procedural build scripts. `python3 build_scene.py` regenerates the whole scene (it needs `pip install bpy` or `blender -b -P`). `render.py` renders the cameras, and `export_web.py` writes `scene.glb` and `scene.json` for the viewer.
 - `renders/`, `photos/`: Cycles renders and the photos they were matched to.
+
+### HQ sculpts (in progress, published batch by batch)
+
+The props are being re-sculpted at much higher quality (`src/props_hq.py`). Think of it as swapping LEGO for clay:
+
+- **Sculpting** (`src/sdf.py`): each form is a signed-distance field, built from anatomical landmarks and reference images (a human skull from glabella/zygion/gnathion measurements, cervid skulls, canine skull, vertebrae, ribs, ilium bowls, hands with phalanges). Pieces are blended with smooth unions, sockets and openings are carved with smooth subtractions, and surface detail comes from fbm/ridged noise and domain warping. Marching cubes turns the field into a mesh, which is relaxed and decimated to a budget.
+- **Drapery**: tablecloths, the altar runner, the banner, the mirror shroud and the ghost's sheet are Blender cloth simulations; robes use fold-modulated solids of revolution.
+- **Baking** (`src/hq_lib.py`): every material (procedural colour, bump, roughness, metal, emission, painted textures such as the spirit board and sigil cloth) is baked into one atlas per prop — colour × ambient occlusion, a tangent normal map, roughness/metal and emission — so the detail survives the trip to the browser.
+- **Size**: JPEG textures plus meshopt geometry compression keep most props at 0.3–1 MB.
+
+Rigged props keep their bone names, so poses and the articulator still work.

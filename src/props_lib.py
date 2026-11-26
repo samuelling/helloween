@@ -15,6 +15,7 @@ import build_props as BP
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "props_out")
 ONLY = set(sys.argv[2:])
 os.makedirs(os.path.join(OUT, "thumbs"), exist_ok=True)
+IMG_FMT = "AUTO"
 
 # ===================================================================== shared
 def fresh():
@@ -1075,7 +1076,8 @@ def finalize_and_export(pid, info):
     path = os.path.join(OUT, pid + ".glb")
     bpy.ops.export_scene.gltf(filepath=path, export_format="GLB", export_apply=True, export_skins=True,
                               export_animations=False, export_lights=False, export_cameras=False,
-                              export_draco_mesh_compression_enable=not rigged, export_yup=True)
+                              export_draco_mesh_compression_enable=False, export_yup=True,
+                              export_image_format=IMG_FMT, export_jpeg_quality=84)
     thumb(pid, lo, hi)
     info.update({"id": pid, "file": f"props/{pid}.glb", "thumb": f"props/thumbs/{pid}.jpg",
                  "size": [round(hi.x - lo.x, 2), round(hi.z - lo.z, 2), round(hi.y - lo.y, 2)],

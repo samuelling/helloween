@@ -3,7 +3,7 @@
   "name": "Skeleton",
   "cat": "Bones",
   "rig": "human",
-  "desc": "Life-size, fully articulated. Pick a preset pose or rotate any joint.",
+  "desc": "Anatomical, life-size and fully articulated: 24 vertebrae, 24 ribs, sculpted skull. Pick a pose or rotate any joint.",
   "bones": [
    {
     "n": "pelvis",
@@ -249,17 +249,19 @@
   "thumb": "props/thumbs/skeleton.jpg",
   "size": [
    0.42,
-   1.75,
+   1.76,
    0.28
   ],
-  "tris": 9544,
-  "kb": 287
+  "tris": 57500,
+  "kb": 1655,
+  "hq": true,
+  "order": 54
  },
  "skeleton_dog": {
   "name": "Skeleton hound",
   "cat": "Bones",
   "rig": "dog",
-  "desc": "Bony dog with glowing eyes. Articulated spine, tail and legs.",
+  "desc": "Anatomical canine skeleton with a keeled ribcage and glowing eyes. Articulated spine, tail and legs.",
   "bones": [
    {
     "n": "hips",
@@ -546,18 +548,20 @@
   "file": "props/skeleton_dog.glb",
   "thumb": "props/thumbs/skeleton_dog.jpg",
   "size": [
-   0.27,
-   0.94,
-   1.49
+   0.25,
+   0.87,
+   1.48
   ],
-  "tris": 5868,
-  "kb": 188
+  "tris": 32548,
+  "kb": 825,
+  "hq": true,
+  "order": 54
  },
  "giant_spider": {
   "name": "Giant spider",
   "cat": "Creatures",
   "rig": "spider",
-  "desc": "3 m leg span, 24 posable leg joints, glowing skull on its back.",
+  "desc": "3 m leg span, banded bristly legs with 24 posable joints, fangs, eight red eyes and a glowing skull on its back.",
   "bones": [
    {
     "n": "body",
@@ -915,17 +919,19 @@
   "thumb": "props/thumbs/giant_spider.jpg",
   "size": [
    3.36,
-   1.03,
-   2.84
+   1.11,
+   2.86
   ],
-  "tris": 9948,
-  "kb": 288
+  "tris": 38388,
+  "kb": 739,
+  "hq": true,
+  "order": 54
  },
  "bone_serpent": {
   "name": "Bone serpent",
   "cat": "Bones",
   "rig": "chain",
-  "desc": "3 m vertebra snake with 17 joints. Coil it, rear it up, or drape it over the railing.",
+  "desc": "3 m snake skeleton: 48 vertebrae with ribs, fanged skull, green eyes, 17 joints. Coil it or rear it up.",
   "bones": [
    {
     "n": "seg00",
@@ -1170,12 +1176,14 @@
   "file": "props/bone_serpent.glb",
   "thumb": "props/thumbs/bone_serpent.jpg",
   "size": [
-   0.14,
-   0.22,
-   3.18
+   0.27,
+   0.24,
+   3.21
   ],
-  "tris": 8176,
-  "kb": 250
+  "tris": 30646,
+  "kb": 855,
+  "hq": true,
+  "order": 54
  },
  "giant_skull": {
   "name": "Giant skull",
@@ -1193,47 +1201,53 @@
     0.7
    ]
   },
-  "desc": "1.4 m skull with pulsing red eyes.",
+  "desc": "1.5 m sculpted skull, weathered and cracked, with pulsing red eyes.",
   "id": "giant_skull",
   "file": "props/giant_skull.glb",
   "thumb": "props/thumbs/giant_skull.jpg",
   "size": [
-   1.18,
-   1.63,
-   1.48
+   0.96,
+   1.56,
+   1.46
   ],
-  "tris": 4056,
-  "kb": 78
+  "tris": 31576,
+  "kb": 519,
+  "hq": true,
+  "order": 54
  },
  "skull_pile": {
   "name": "Ossuary pile",
   "cat": "Bones",
-  "desc": "Pyramid of 25 skulls, all facing out.",
+  "desc": "Pyramid of 25 sculpted skulls facing out, ringed with long bones.",
   "id": "skull_pile",
   "file": "props/skull_pile.glb",
   "thumb": "props/thumbs/skull_pile.jpg",
   "size": [
-   1.4,
-   0.74,
-   1.39
+   1.65,
+   0.73,
+   1.68
   ],
-  "tris": 13800,
-  "kb": 249
+  "tris": 81000,
+  "kb": 410,
+  "hq": true,
+  "order": 54
  },
  "ribcage_arch": {
   "name": "Ribcage archway",
   "cat": "Bones",
-  "desc": "Walk-through tunnel of giant ribs, 2.6 m tall.",
+  "desc": "Walk-through tunnel of giant flat ribs under a vertebral ridge, 2.6 m tall, with red LED drops.",
   "id": "ribcage_arch",
   "file": "props/ribcage_arch.glb",
   "thumb": "props/thumbs/ribcage_arch.jpg",
   "size": [
-   2.74,
-   2.72,
-   4.36
+   2.77,
+   3.04,
+   4.58
   ],
-  "tris": 6832,
-  "kb": 130
+  "tris": 26460,
+  "kb": 599,
+  "hq": true,
+  "order": 54
  },
  "eyeball_tree": {
   "name": "Eyeball tree",
@@ -1259,77 +1273,87 @@
   "behaviors": [
    "creak"
   ],
-  "desc": "Velvet-lined coffin whose lid slowly creaks open and shut.",
+  "desc": "Toe-pincher coffin in banded mahogany with a tufted crimson lining, brass handles and a studded lid that creaks open and shut.",
   "id": "coffin",
   "file": "props/coffin.glb",
   "thumb": "props/thumbs/coffin.jpg",
   "size": [
-   0.84,
-   2.05,
+   0.93,
+   2.04,
    0.51
   ],
-  "tris": 140,
-  "kb": 10
+  "tris": 26500,
+  "kb": 382,
+  "hq": true,
+  "order": 54
  },
  "tombstone_rip": {
   "name": "R.I.P. headstone",
-  "desc": "Rounded slate headstone.",
+  "desc": "Weathered slate headstone with a recessed arch, carved lettering and moss at the foot.",
   "cat": "Graveyard",
   "id": "tombstone_rip",
   "file": "props/tombstone_rip.glb",
   "thumb": "props/thumbs/tombstone_rip.jpg",
   "size": [
-   0.76,
-   1.14,
-   0.24
+   0.79,
+   1.15,
+   0.27
   ],
-  "tris": 4676,
-  "kb": 178
+  "tris": 12000,
+  "kb": 261,
+  "hq": true,
+  "order": 54
  },
  "tombstone_cross": {
   "name": "Stone cross",
-  "desc": "Weathered Celtic-style grave cross.",
+  "desc": "Weathered ringed grave cross with beaded carving and lichen creeping up the plinth.",
   "cat": "Graveyard",
   "id": "tombstone_cross",
   "file": "props/tombstone_cross.glb",
   "thumb": "props/thumbs/tombstone_cross.jpg",
   "size": [
-   0.62,
+   0.61,
    1.24,
-   0.3
+   0.33
   ],
-  "tris": 372,
-  "kb": 8
+  "tris": 12000,
+  "kb": 286,
+  "hq": true,
+  "order": 54
  },
  "obelisk": {
   "name": "Obelisk",
-  "desc": "2.2 m granite obelisk.",
+  "desc": "2.2 m tapered granite obelisk on a stepped plinth, carved IN MEMORIAM.",
   "cat": "Graveyard",
   "id": "obelisk",
   "file": "props/obelisk.glb",
   "thumb": "props/thumbs/obelisk.jpg",
   "size": [
-   0.6,
+   0.63,
    2.15,
-   0.6
+   0.63
   ],
-  "tris": 50,
-  "kb": 3
+  "tris": 8500,
+  "kb": 232,
+  "hq": true,
+  "order": 54
  },
  "iron_fence": {
   "name": "Iron fence (3 m)",
   "cat": "Graveyard",
-  "desc": "Wrought-iron graveyard fence section with spear tips.",
+  "desc": "Wrought-iron cemetery railing with spear finials and scrollwork between two granite pillars.",
   "id": "iron_fence",
   "file": "props/iron_fence.glb",
   "thumb": "props/thumbs/iron_fence.jpg",
   "size": [
-   3.37,
-   1.67,
-   0.18
+   3.2,
+   1.71,
+   0.2
   ],
-  "tris": 2688,
-  "kb": 51
+  "tris": 26000,
+  "kb": 563,
+  "hq": true,
+  "order": 54
  },
  "cauldron": {
   "name": "Bubbling cauldron",
@@ -1347,17 +1371,19 @@
     0
    ]
   },
-  "desc": "Iron cauldron of glowing green brew over a fire.",
+  "desc": "Pitted cast-iron cauldron on three feet, bail handle up, glowing green brew bubbling over a log fire.",
   "id": "cauldron",
   "file": "props/cauldron.glb",
   "thumb": "props/thumbs/cauldron.jpg",
   "size": [
-   0.92,
-   0.79,
-   0.92
+   0.98,
+   1.17,
+   0.93
   ],
-  "tris": 2472,
-  "kb": 49
+  "tris": 26498,
+  "kb": 505,
+  "hq": true,
+  "order": 54
  },
  "jack_o_lantern": {
   "name": "Jack-o'-lantern",
@@ -1375,17 +1401,19 @@
     0
    ]
   },
-  "desc": "Classic carved pumpkin with a candle flicker.",
+  "desc": "Deep-ribbed pumpkin with a cut-through toothy grin, glowing from inside, gnarled stem.",
   "id": "jack_o_lantern",
   "file": "props/jack_o_lantern.glb",
   "thumb": "props/thumbs/jack_o_lantern.jpg",
   "size": [
-   0.6,
-   0.54,
-   0.59
+   0.57,
+   0.55,
+   0.58
   ],
-  "tris": 514,
-  "kb": 13
+  "tris": 12200,
+  "kb": 417,
+  "hq": true,
+  "order": 54
  },
  "pumpkin_totem": {
   "name": "Pumpkin totem",
@@ -1403,17 +1431,19 @@
     0.25
    ]
   },
-  "desc": "Four grinning jack-o'-lanterns stacked into a 1.6 m totem.",
+  "desc": "Four carved jack-o'-lanterns stacked into a 1.6 m totem, alternating grins and scowls.",
   "id": "pumpkin_totem",
   "file": "props/pumpkin_totem.glb",
   "thumb": "props/thumbs/pumpkin_totem.jpg",
   "size": [
-   0.68,
-   1.59,
+   0.65,
+   1.54,
    0.66
   ],
-  "tris": 1984,
-  "kb": 43
+  "tris": 45194,
+  "kb": 997,
+  "hq": true,
+  "order": 54
  },
  "scarecrow": {
   "name": "Scarecrow",
@@ -1620,17 +1650,19 @@
  "bone_throne": {
   "name": "Bone throne",
   "cat": "Bones",
-  "desc": "A throne of femurs and skulls. Seat a skeleton in it.",
+  "desc": "A throne of knobbed femurs, woven ribs and a crown of skulls. Seat a skeleton in it.",
   "id": "bone_throne",
   "file": "props/bone_throne.glb",
   "thumb": "props/thumbs/bone_throne.jpg",
   "size": [
-   0.91,
-   1.83,
-   0.9
+   0.98,
+   1.82,
+   0.99
   ],
-  "tris": 5432,
-  "kb": 99
+  "tris": 48000,
+  "kb": 644,
+  "hq": true,
+  "order": 54
  },
  "crow_post": {
   "name": "Crow on a post",
@@ -1653,32 +1685,36 @@
  "elk_skull": {
   "name": "Elk skull",
   "cat": "Bones",
-  "desc": "Weathered elk skull with a full rack.",
+  "desc": "Weathered elk skull with a full, ridged rack.",
   "id": "elk_skull",
   "file": "props/elk_skull.glb",
   "thumb": "props/thumbs/elk_skull.jpg",
   "size": [
    1.5,
-   1.33,
-   0.74
+   1.28,
+   0.73
   ],
-  "tris": 10716,
-  "kb": 250
+  "tris": 16798,
+  "kb": 411,
+  "hq": true,
+  "order": 54
  },
  "antler_stave": {
   "name": "Antler stave",
   "cat": "2026 display",
-  "desc": "Pole topped with a twine-wrapped deer skull.",
+  "desc": "Split pole topped with a twine-wrapped deer skull and antlers.",
   "id": "antler_stave",
   "file": "props/antler_stave.glb",
   "thumb": "props/thumbs/antler_stave.jpg",
   "size": [
-   0.79,
-   2.89,
-   0.51
+   0.8,
+   2.96,
+   0.53
   ],
-  "tris": 10080,
-  "kb": 232
+  "tris": 22298,
+  "kb": 386,
+  "hq": true,
+  "order": 54
  },
  "jawbone_girl": {
   "name": "Jawbone girl",
@@ -1747,7 +1783,7 @@
   "behaviors": [
    "sway"
   ],
-  "desc": "Four tentacles bursting out of the lawn. They sway; every segment can be posed.",
+  "desc": "Four ridged, sucker-lined tentacles bursting out of torn sod. They sway; every segment can be posed.",
   "bones": [
    {
     "n": "t0_0",
@@ -2202,27 +2238,31 @@
   "file": "props/lawn_tentacles.glb",
   "thumb": "props/thumbs/lawn_tentacles.jpg",
   "size": [
-   2.16,
-   2.16,
-   1.8
+   2.13,
+   2.19,
+   1.82
   ],
-  "tris": 11312,
-  "kb": 329
+  "tris": 46998,
+  "kb": 1045,
+  "hq": true,
+  "order": 54
  },
  "grasping_arms": {
   "name": "Grasping arms",
   "cat": "Bones",
-  "desc": "Six skeletal arms clawing out of a dirt mound.",
+  "desc": "Six anatomical skeletal arms clawing up out of a churned dirt mound.",
   "id": "grasping_arms",
   "file": "props/grasping_arms.glb",
   "thumb": "props/thumbs/grasping_arms.jpg",
   "size": [
-   1.5,
-   0.94,
-   1.5
+   1.94,
+   0.63,
+   1.84
   ],
-  "tris": 3000,
-  "kb": 58
+  "tris": 24588,
+  "kb": 477,
+  "hq": true,
+  "order": 54
  },
  "seance_table": {
   "name": "S\u00e9ance table",
@@ -2240,18 +2280,19 @@
     0
    ]
   },
-  "desc": "Velvet-draped table with a spirit board, planchette, black candles and four empty chairs.",
+  "desc": "Turned walnut table under a draped velvet cloth: painted spirit board, planchette, dripping black candles, four spindle chairs.",
   "id": "seance_table",
   "file": "props/seance_table.glb",
   "thumb": "props/thumbs/seance_table.jpg",
   "size": [
-   2.32,
-   1.07,
-   2.32
+   2.3,
+   1.11,
+   2.3
   ],
-  "tris": 13272,
-  "kb": 482,
-  "order": 36
+  "tris": 66852,
+  "kb": 701,
+  "order": 36,
+  "hq": true
  },
  "ritual_circle": {
   "name": "Ritual circle",
@@ -2269,18 +2310,19 @@
     0
    ]
   },
-  "desc": "3 m glowing inverted star in a double ring, a black candle on each point.",
+  "desc": "3 m glowing inverted star in a double ring of invented runes on scorched ash, a guttering black candle on each point.",
   "id": "ritual_circle",
   "file": "props/ritual_circle.glb",
   "thumb": "props/thumbs/ritual_circle.jpg",
   "size": [
-   3.22,
-   0.32,
-   3.26
+   3.35,
+   0.36,
+   3.35
   ],
-  "tris": 3064,
-  "kb": 70,
-  "order": 37
+  "tris": 39314,
+  "kb": 661,
+  "order": 37,
+  "hq": true
  },
  "cultist": {
   "name": "Hooded cultist",
@@ -2288,18 +2330,19 @@
   "behaviors": [
    "sway_body"
   ],
-  "desc": "Faceless figure in a black robe, hands clasped. Place them in a ring.",
+  "desc": "Faceless figure in a heavy black robe, long pale hands clasped. Place them in a ring.",
   "id": "cultist",
   "file": "props/cultist.glb",
   "thumb": "props/thumbs/cultist.jpg",
   "size": [
    0.8,
-   1.93,
-   0.67
+   1.84,
+   0.65
   ],
-  "tris": 2026,
-  "kb": 39,
-  "order": 38
+  "tris": 28200,
+  "kb": 595,
+  "order": 38,
+  "hq": true
  },
  "cultist_crimson": {
   "name": "Crimson acolyte",

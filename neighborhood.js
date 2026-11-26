@@ -76,10 +76,10 @@ export async function addNeighborhood(scene) {
   wg.setAttribute('color', new THREE.Float32BufferAttribute(wallCol, 3));
   wg.computeVertexNormals();
   const wallMat = new THREE.MeshStandardMaterial({ map: winTex.map, emissiveMap: winTex.glow, emissive: 0xffb36b,
-    emissiveIntensity: 1.4, vertexColors: true, roughness: 0.9, side: THREE.DoubleSide });
+    emissiveIntensity: 0.7, vertexColors: true, roughness: 0.9, side: THREE.DoubleSide });
   const walls = new THREE.Mesh(wg, wallMat);
   walls.name = 'Neighbor_Walls'; walls.castShadow = walls.receiveShadow = true;
-  walls.userData.nightGlow = 1.4;
+  walls.userData.nightGlow = 0.7;
   const rg = new THREE.BufferGeometry();
   rg.setAttribute('position', new THREE.Float32BufferAttribute(roofPos, 3));
   rg.setAttribute('uv', new THREE.Float32BufferAttribute(roofUv, 2));

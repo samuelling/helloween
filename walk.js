@@ -25,7 +25,7 @@ export function initWalk({ scene, camera, renderer, orbit, root, ui, extraFloors
   const floorSet = [...colliders, ...extraFloors];
 
   const ray = new THREE.Raycaster();
-  ray.firstHitOnly = true;
+  const shown = o => { for (let p = o; p; p = p.parent) if (!p.visible) return false; return true; };
   const plc = new PointerLockControls(camera, renderer.domElement);
   const state = { on: false, vel: new THREE.Vector3(), vy: 0, feet: new THREE.Vector3(), keys: {}, grounded: true,
                   touchMove: new THREE.Vector2(), torch: null };
@@ -39,7 +39,7 @@ export function initWalk({ scene, camera, renderer, orbit, root, ui, extraFloors
   function floorAt(p, from = 1.0) {
     ray.set(new THREE.Vector3(p.x, p.y + from, p.z), new THREE.Vector3(0, -1, 0));
     ray.far = from + 3;
-    const h = ray.intersectObjects(floorSet, false)[0];
+    const h = ray.intersectObjects(floorSet, false).find(x => shown(x.object));
     return h ? h.point.y : -Infinity;
   }
 
@@ -48,7 +48,7 @@ export function initWalk({ scene, camera, renderer, orbit, root, ui, extraFloors
     for (const y of [STEP_UP + 0.05, 0.95, 1.55]) {
       ray.set(new THREE.Vector3(p.x, p.y + y, p.z), dir);
       ray.far = dist + RADIUS;
-      const h = ray.intersectObjects(colliders, false)[0];
+      const h = ray.intersectObjects(colliders, false).find(x => shown(x.object));
       if (h) return h;
     }
     return null;

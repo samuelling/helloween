@@ -1,0 +1,2227 @@
+{
+ "skeleton": {
+  "name": "Skeleton",
+  "cat": "Bones",
+  "rig": "human",
+  "desc": "Life-size, fully articulated. Pick a preset pose or rotate any joint.",
+  "bones": [
+   {
+    "n": "pelvis",
+    "h": [
+     0.0,
+     0.98,
+     -0.0
+    ],
+    "t": [
+     0.0,
+     1.1,
+     -0.0
+    ],
+    "p": null
+   },
+   {
+    "n": "spine",
+    "h": [
+     0.0,
+     1.1,
+     -0.0
+    ],
+    "t": [
+     0.0,
+     1.3,
+     -0.0
+    ],
+    "p": "pelvis"
+   },
+   {
+    "n": "chest",
+    "h": [
+     0.0,
+     1.3,
+     -0.0
+    ],
+    "t": [
+     0.0,
+     1.5,
+     -0.0
+    ],
+    "p": "spine"
+   },
+   {
+    "n": "neck",
+    "h": [
+     0.0,
+     1.5,
+     -0.0
+    ],
+    "t": [
+     0.0,
+     1.58,
+     -0.0
+    ],
+    "p": "chest"
+   },
+   {
+    "n": "head",
+    "h": [
+     0.0,
+     1.58,
+     -0.0
+    ],
+    "t": [
+     0.0,
+     1.78,
+     -0.0
+    ],
+    "p": "neck"
+   },
+   {
+    "n": "upper_armL",
+    "h": [
+     0.18,
+     1.45,
+     -0.0
+    ],
+    "t": [
+     0.18,
+     1.16,
+     -0.0
+    ],
+    "p": "chest"
+   },
+   {
+    "n": "forearmL",
+    "h": [
+     0.18,
+     1.16,
+     -0.0
+    ],
+    "t": [
+     0.18,
+     0.91,
+     -0.0
+    ],
+    "p": "upper_armL"
+   },
+   {
+    "n": "handL",
+    "h": [
+     0.18,
+     0.91,
+     -0.0
+    ],
+    "t": [
+     0.18,
+     0.74,
+     -0.0
+    ],
+    "p": "forearmL"
+   },
+   {
+    "n": "upper_armR",
+    "h": [
+     -0.18,
+     1.45,
+     -0.0
+    ],
+    "t": [
+     -0.18,
+     1.16,
+     -0.0
+    ],
+    "p": "chest"
+   },
+   {
+    "n": "forearmR",
+    "h": [
+     -0.18,
+     1.16,
+     -0.0
+    ],
+    "t": [
+     -0.18,
+     0.91,
+     -0.0
+    ],
+    "p": "upper_armR"
+   },
+   {
+    "n": "handR",
+    "h": [
+     -0.18,
+     0.91,
+     -0.0
+    ],
+    "t": [
+     -0.18,
+     0.74,
+     -0.0
+    ],
+    "p": "forearmR"
+   },
+   {
+    "n": "thighL",
+    "h": [
+     0.1,
+     0.97,
+     -0.0
+    ],
+    "t": [
+     0.1,
+     0.53,
+     -0.0
+    ],
+    "p": "pelvis"
+   },
+   {
+    "n": "shinL",
+    "h": [
+     0.1,
+     0.53,
+     -0.0
+    ],
+    "t": [
+     0.1,
+     0.1,
+     -0.0
+    ],
+    "p": "thighL"
+   },
+   {
+    "n": "footL",
+    "h": [
+     0.1,
+     0.1,
+     -0.0
+    ],
+    "t": [
+     0.1,
+     0.03,
+     0.16
+    ],
+    "p": "shinL"
+   },
+   {
+    "n": "thighR",
+    "h": [
+     -0.1,
+     0.97,
+     -0.0
+    ],
+    "t": [
+     -0.1,
+     0.53,
+     -0.0
+    ],
+    "p": "pelvis"
+   },
+   {
+    "n": "shinR",
+    "h": [
+     -0.1,
+     0.53,
+     -0.0
+    ],
+    "t": [
+     -0.1,
+     0.1,
+     -0.0
+    ],
+    "p": "thighR"
+   },
+   {
+    "n": "footR",
+    "h": [
+     -0.1,
+     0.1,
+     -0.0
+    ],
+    "t": [
+     -0.1,
+     0.03,
+     0.16
+    ],
+    "p": "shinR"
+   }
+  ],
+  "id": "skeleton",
+  "file": "props/skeleton.glb",
+  "thumb": "props/thumbs/skeleton.jpg",
+  "size": [
+   0.42,
+   1.75,
+   0.28
+  ],
+  "tris": 9544,
+  "kb": 287
+ },
+ "skeleton_dog": {
+  "name": "Skeleton hound",
+  "cat": "Bones",
+  "rig": "dog",
+  "desc": "Bony dog with glowing eyes. Articulated spine, tail and legs.",
+  "bones": [
+   {
+    "n": "hips",
+    "h": [
+     0.0,
+     0.55,
+     -0.3
+    ],
+    "t": [
+     0.0,
+     0.58,
+     -0.14
+    ],
+    "p": null
+   },
+   {
+    "n": "spine",
+    "h": [
+     0.0,
+     0.58,
+     -0.14
+    ],
+    "t": [
+     0.0,
+     0.6,
+     0.12
+    ],
+    "p": "hips"
+   },
+   {
+    "n": "chest",
+    "h": [
+     0.0,
+     0.6,
+     0.12
+    ],
+    "t": [
+     0.0,
+     0.62,
+     0.3
+    ],
+    "p": "spine"
+   },
+   {
+    "n": "neck",
+    "h": [
+     0.0,
+     0.62,
+     0.3
+    ],
+    "t": [
+     0.0,
+     0.8,
+     0.42
+    ],
+    "p": "chest"
+   },
+   {
+    "n": "head",
+    "h": [
+     0.0,
+     0.8,
+     0.42
+    ],
+    "t": [
+     0.0,
+     0.76,
+     0.66
+    ],
+    "p": "neck"
+   },
+   {
+    "n": "front_upperL",
+    "h": [
+     0.09,
+     0.55,
+     0.27
+    ],
+    "t": [
+     0.09,
+     0.33,
+     0.29
+    ],
+    "p": "chest"
+   },
+   {
+    "n": "front_lowerL",
+    "h": [
+     0.09,
+     0.33,
+     0.29
+    ],
+    "t": [
+     0.09,
+     0.08,
+     0.27
+    ],
+    "p": "front_upperL"
+   },
+   {
+    "n": "front_pawL",
+    "h": [
+     0.09,
+     0.08,
+     0.27
+    ],
+    "t": [
+     0.09,
+     0.02,
+     0.35
+    ],
+    "p": "front_lowerL"
+   },
+   {
+    "n": "front_upperR",
+    "h": [
+     -0.09,
+     0.55,
+     0.27
+    ],
+    "t": [
+     -0.09,
+     0.33,
+     0.29
+    ],
+    "p": "chest"
+   },
+   {
+    "n": "front_lowerR",
+    "h": [
+     -0.09,
+     0.33,
+     0.29
+    ],
+    "t": [
+     -0.09,
+     0.08,
+     0.27
+    ],
+    "p": "front_upperR"
+   },
+   {
+    "n": "front_pawR",
+    "h": [
+     -0.09,
+     0.08,
+     0.27
+    ],
+    "t": [
+     -0.09,
+     0.02,
+     0.35
+    ],
+    "p": "front_lowerR"
+   },
+   {
+    "n": "tail1",
+    "h": [
+     0.0,
+     0.56,
+     -0.32
+    ],
+    "t": [
+     0.0,
+     0.62,
+     -0.48
+    ],
+    "p": "hips"
+   },
+   {
+    "n": "tail2",
+    "h": [
+     0.0,
+     0.62,
+     -0.48
+    ],
+    "t": [
+     0.0,
+     0.7,
+     -0.64
+    ],
+    "p": "tail1"
+   },
+   {
+    "n": "tail3",
+    "h": [
+     0.0,
+     0.7,
+     -0.64
+    ],
+    "t": [
+     0.0,
+     0.8,
+     -0.8
+    ],
+    "p": "tail2"
+   },
+   {
+    "n": "hind_upperL",
+    "h": [
+     0.09,
+     0.52,
+     -0.28
+    ],
+    "t": [
+     0.09,
+     0.32,
+     -0.2
+    ],
+    "p": "hips"
+   },
+   {
+    "n": "hind_lowerL",
+    "h": [
+     0.09,
+     0.32,
+     -0.2
+    ],
+    "t": [
+     0.09,
+     0.09,
+     -0.33
+    ],
+    "p": "hind_upperL"
+   },
+   {
+    "n": "hind_pawL",
+    "h": [
+     0.09,
+     0.09,
+     -0.33
+    ],
+    "t": [
+     0.09,
+     0.02,
+     -0.26
+    ],
+    "p": "hind_lowerL"
+   },
+   {
+    "n": "hind_upperR",
+    "h": [
+     -0.09,
+     0.52,
+     -0.28
+    ],
+    "t": [
+     -0.09,
+     0.32,
+     -0.2
+    ],
+    "p": "hips"
+   },
+   {
+    "n": "hind_lowerR",
+    "h": [
+     -0.09,
+     0.32,
+     -0.2
+    ],
+    "t": [
+     -0.09,
+     0.09,
+     -0.33
+    ],
+    "p": "hind_upperR"
+   },
+   {
+    "n": "hind_pawR",
+    "h": [
+     -0.09,
+     0.09,
+     -0.33
+    ],
+    "t": [
+     -0.09,
+     0.02,
+     -0.26
+    ],
+    "p": "hind_lowerR"
+   }
+  ],
+  "id": "skeleton_dog",
+  "file": "props/skeleton_dog.glb",
+  "thumb": "props/thumbs/skeleton_dog.jpg",
+  "size": [
+   0.27,
+   0.94,
+   1.49
+  ],
+  "tris": 5868,
+  "kb": 188
+ },
+ "giant_spider": {
+  "name": "Giant spider",
+  "cat": "Creatures",
+  "rig": "spider",
+  "desc": "3 m leg span, 24 posable leg joints, glowing skull on its back.",
+  "bones": [
+   {
+    "n": "body",
+    "h": [
+     0.0,
+     0.55,
+     -0.25
+    ],
+    "t": [
+     0.0,
+     0.55,
+     0.25
+    ],
+    "p": null
+   },
+   {
+    "n": "leg0L_a",
+    "h": [
+     0.09,
+     0.5,
+     0.2759
+    ],
+    "t": [
+     0.415,
+     1.0,
+     0.8388
+    ],
+    "p": "body"
+   },
+   {
+    "n": "leg0L_b",
+    "h": [
+     0.415,
+     1.0,
+     0.8388
+    ],
+    "t": [
+     0.715,
+     0.75,
+     1.3584
+    ],
+    "p": "leg0L_a"
+   },
+   {
+    "n": "leg0L_c",
+    "h": [
+     0.715,
+     0.75,
+     1.3584
+    ],
+    "t": [
+     0.865,
+     0.02,
+     1.6182
+    ],
+    "p": "leg0L_b"
+   },
+   {
+    "n": "leg1L_a",
+    "h": [
+     0.1631,
+     0.5,
+     0.1961
+    ],
+    "t": [
+     0.7522,
+     1.0,
+     0.4708
+    ],
+    "p": "body"
+   },
+   {
+    "n": "leg1L_b",
+    "h": [
+     0.7522,
+     1.0,
+     0.4708
+    ],
+    "t": [
+     1.296,
+     0.75,
+     0.7243
+    ],
+    "p": "leg1L_a"
+   },
+   {
+    "n": "leg1L_c",
+    "h": [
+     1.296,
+     0.75,
+     0.7243
+    ],
+    "t": [
+     1.5679,
+     0.02,
+     0.8511
+    ],
+    "p": "leg1L_b"
+   },
+   {
+    "n": "leg2L_a",
+    "h": [
+     0.1739,
+     0.5,
+     0.0734
+    ],
+    "t": [
+     0.8017,
+     1.0,
+     -0.0948
+    ],
+    "p": "body"
+   },
+   {
+    "n": "leg2L_b",
+    "h": [
+     0.8017,
+     1.0,
+     -0.0948
+    ],
+    "t": [
+     1.3813,
+     0.75,
+     -0.2501
+    ],
+    "p": "leg2L_a"
+   },
+   {
+    "n": "leg2L_c",
+    "h": [
+     1.3813,
+     0.75,
+     -0.2501
+    ],
+    "t": [
+     1.6711,
+     0.02,
+     -0.3278
+    ],
+    "p": "leg2L_b"
+   },
+   {
+    "n": "leg3L_a",
+    "h": [
+     0.1157,
+     0.5,
+     -0.0179
+    ],
+    "t": [
+     0.5335,
+     1.0,
+     -0.5158
+    ],
+    "p": "body"
+   },
+   {
+    "n": "leg3L_b",
+    "h": [
+     0.5335,
+     1.0,
+     -0.5158
+    ],
+    "t": [
+     0.9192,
+     0.75,
+     -0.9754
+    ],
+    "p": "leg3L_a"
+   },
+   {
+    "n": "leg3L_c",
+    "h": [
+     0.9192,
+     0.75,
+     -0.9754
+    ],
+    "t": [
+     1.112,
+     0.02,
+     -1.2053
+    ],
+    "p": "leg3L_b"
+   },
+   {
+    "n": "leg0R_a",
+    "h": [
+     -0.09,
+     0.5,
+     0.2759
+    ],
+    "t": [
+     -0.415,
+     1.0,
+     0.8388
+    ],
+    "p": "body"
+   },
+   {
+    "n": "leg0R_b",
+    "h": [
+     -0.415,
+     1.0,
+     0.8388
+    ],
+    "t": [
+     -0.715,
+     0.75,
+     1.3584
+    ],
+    "p": "leg0R_a"
+   },
+   {
+    "n": "leg0R_c",
+    "h": [
+     -0.715,
+     0.75,
+     1.3584
+    ],
+    "t": [
+     -0.865,
+     0.02,
+     1.6182
+    ],
+    "p": "leg0R_b"
+   },
+   {
+    "n": "leg1R_a",
+    "h": [
+     -0.1631,
+     0.5,
+     0.1961
+    ],
+    "t": [
+     -0.7522,
+     1.0,
+     0.4708
+    ],
+    "p": "body"
+   },
+   {
+    "n": "leg1R_b",
+    "h": [
+     -0.7522,
+     1.0,
+     0.4708
+    ],
+    "t": [
+     -1.296,
+     0.75,
+     0.7243
+    ],
+    "p": "leg1R_a"
+   },
+   {
+    "n": "leg1R_c",
+    "h": [
+     -1.296,
+     0.75,
+     0.7243
+    ],
+    "t": [
+     -1.5679,
+     0.02,
+     0.8511
+    ],
+    "p": "leg1R_b"
+   },
+   {
+    "n": "leg2R_a",
+    "h": [
+     -0.1739,
+     0.5,
+     0.0734
+    ],
+    "t": [
+     -0.8017,
+     1.0,
+     -0.0948
+    ],
+    "p": "body"
+   },
+   {
+    "n": "leg2R_b",
+    "h": [
+     -0.8017,
+     1.0,
+     -0.0948
+    ],
+    "t": [
+     -1.3813,
+     0.75,
+     -0.2501
+    ],
+    "p": "leg2R_a"
+   },
+   {
+    "n": "leg2R_c",
+    "h": [
+     -1.3813,
+     0.75,
+     -0.2501
+    ],
+    "t": [
+     -1.6711,
+     0.02,
+     -0.3278
+    ],
+    "p": "leg2R_b"
+   },
+   {
+    "n": "leg3R_a",
+    "h": [
+     -0.1157,
+     0.5,
+     -0.0179
+    ],
+    "t": [
+     -0.5335,
+     1.0,
+     -0.5158
+    ],
+    "p": "body"
+   },
+   {
+    "n": "leg3R_b",
+    "h": [
+     -0.5335,
+     1.0,
+     -0.5158
+    ],
+    "t": [
+     -0.9192,
+     0.75,
+     -0.9754
+    ],
+    "p": "leg3R_a"
+   },
+   {
+    "n": "leg3R_c",
+    "h": [
+     -0.9192,
+     0.75,
+     -0.9754
+    ],
+    "t": [
+     -1.112,
+     0.02,
+     -1.2053
+    ],
+    "p": "leg3R_b"
+   }
+  ],
+  "id": "giant_spider",
+  "file": "props/giant_spider.glb",
+  "thumb": "props/thumbs/giant_spider.jpg",
+  "size": [
+   3.36,
+   1.03,
+   2.84
+  ],
+  "tris": 9948,
+  "kb": 288
+ },
+ "bone_serpent": {
+  "name": "Bone serpent",
+  "cat": "Bones",
+  "rig": "chain",
+  "desc": "3 m vertebra snake with 17 joints. Coil it, rear it up, or drape it over the railing.",
+  "bones": [
+   {
+    "n": "seg00",
+    "h": [
+     0.0,
+     0.14,
+     -2.4
+    ],
+    "t": [
+     0.0,
+     0.14,
+     -2.22
+    ],
+    "p": null
+   },
+   {
+    "n": "seg01",
+    "h": [
+     0.0,
+     0.14,
+     -2.22
+    ],
+    "t": [
+     0.0,
+     0.14,
+     -2.04
+    ],
+    "p": "seg00"
+   },
+   {
+    "n": "seg02",
+    "h": [
+     0.0,
+     0.14,
+     -2.04
+    ],
+    "t": [
+     0.0,
+     0.14,
+     -1.86
+    ],
+    "p": "seg01"
+   },
+   {
+    "n": "seg03",
+    "h": [
+     0.0,
+     0.14,
+     -1.86
+    ],
+    "t": [
+     0.0,
+     0.14,
+     -1.68
+    ],
+    "p": "seg02"
+   },
+   {
+    "n": "seg04",
+    "h": [
+     0.0,
+     0.14,
+     -1.68
+    ],
+    "t": [
+     0.0,
+     0.14,
+     -1.5
+    ],
+    "p": "seg03"
+   },
+   {
+    "n": "seg05",
+    "h": [
+     0.0,
+     0.14,
+     -1.5
+    ],
+    "t": [
+     0.0,
+     0.14,
+     -1.32
+    ],
+    "p": "seg04"
+   },
+   {
+    "n": "seg06",
+    "h": [
+     0.0,
+     0.14,
+     -1.32
+    ],
+    "t": [
+     0.0,
+     0.14,
+     -1.14
+    ],
+    "p": "seg05"
+   },
+   {
+    "n": "seg07",
+    "h": [
+     0.0,
+     0.14,
+     -1.14
+    ],
+    "t": [
+     0.0,
+     0.14,
+     -0.96
+    ],
+    "p": "seg06"
+   },
+   {
+    "n": "seg08",
+    "h": [
+     0.0,
+     0.14,
+     -0.96
+    ],
+    "t": [
+     0.0,
+     0.14,
+     -0.78
+    ],
+    "p": "seg07"
+   },
+   {
+    "n": "seg09",
+    "h": [
+     0.0,
+     0.14,
+     -0.78
+    ],
+    "t": [
+     0.0,
+     0.14,
+     -0.6
+    ],
+    "p": "seg08"
+   },
+   {
+    "n": "seg10",
+    "h": [
+     0.0,
+     0.14,
+     -0.6
+    ],
+    "t": [
+     0.0,
+     0.14,
+     -0.42
+    ],
+    "p": "seg09"
+   },
+   {
+    "n": "seg11",
+    "h": [
+     0.0,
+     0.14,
+     -0.42
+    ],
+    "t": [
+     0.0,
+     0.14,
+     -0.24
+    ],
+    "p": "seg10"
+   },
+   {
+    "n": "seg12",
+    "h": [
+     0.0,
+     0.14,
+     -0.24
+    ],
+    "t": [
+     0.0,
+     0.14,
+     -0.06
+    ],
+    "p": "seg11"
+   },
+   {
+    "n": "seg13",
+    "h": [
+     0.0,
+     0.14,
+     -0.06
+    ],
+    "t": [
+     0.0,
+     0.14,
+     0.12
+    ],
+    "p": "seg12"
+   },
+   {
+    "n": "seg14",
+    "h": [
+     0.0,
+     0.14,
+     0.12
+    ],
+    "t": [
+     0.0,
+     0.14,
+     0.3
+    ],
+    "p": "seg13"
+   },
+   {
+    "n": "seg15",
+    "h": [
+     0.0,
+     0.14,
+     0.3
+    ],
+    "t": [
+     0.0,
+     0.14,
+     0.48
+    ],
+    "p": "seg14"
+   },
+   {
+    "n": "head",
+    "h": [
+     0.0,
+     0.14,
+     0.48
+    ],
+    "t": [
+     0.0,
+     0.14,
+     0.78
+    ],
+    "p": "seg15"
+   }
+  ],
+  "id": "bone_serpent",
+  "file": "props/bone_serpent.glb",
+  "thumb": "props/thumbs/bone_serpent.jpg",
+  "size": [
+   0.14,
+   0.22,
+   3.18
+  ],
+  "tris": 8176,
+  "kb": 250
+ },
+ "giant_skull": {
+  "name": "Giant skull",
+  "cat": "Bones",
+  "behaviors": [
+   "pulse"
+  ],
+  "light": {
+   "type": "point",
+   "color": "#ff2210",
+   "intensity": 6,
+   "offset": [
+    0,
+    1.1,
+    0.7
+   ]
+  },
+  "desc": "1.4 m skull with pulsing red eyes.",
+  "id": "giant_skull",
+  "file": "props/giant_skull.glb",
+  "thumb": "props/thumbs/giant_skull.jpg",
+  "size": [
+   1.18,
+   1.63,
+   1.48
+  ],
+  "tris": 4056,
+  "kb": 78
+ },
+ "skull_pile": {
+  "name": "Ossuary pile",
+  "cat": "Bones",
+  "desc": "Pyramid of 25 skulls, all facing out.",
+  "id": "skull_pile",
+  "file": "props/skull_pile.glb",
+  "thumb": "props/thumbs/skull_pile.jpg",
+  "size": [
+   1.4,
+   0.74,
+   1.39
+  ],
+  "tris": 13800,
+  "kb": 249
+ },
+ "ribcage_arch": {
+  "name": "Ribcage archway",
+  "cat": "Bones",
+  "desc": "Walk-through tunnel of giant ribs, 2.6 m tall.",
+  "id": "ribcage_arch",
+  "file": "props/ribcage_arch.glb",
+  "thumb": "props/thumbs/ribcage_arch.jpg",
+  "size": [
+   2.74,
+   2.72,
+   4.36
+  ],
+  "tris": 6832,
+  "kb": 130
+ },
+ "eyeball_tree": {
+  "name": "Eyeball tree",
+  "cat": "Creatures",
+  "behaviors": [
+   "eyes_follow"
+  ],
+  "desc": "Dead tree with 16 eyeballs that turn to watch you.",
+  "id": "eyeball_tree",
+  "file": "props/eyeball_tree.glb",
+  "thumb": "props/thumbs/eyeball_tree.jpg",
+  "size": [
+   2.32,
+   4.27,
+   2.69
+  ],
+  "tris": 27140,
+  "kb": 617
+ },
+ "coffin": {
+  "name": "Upright coffin",
+  "cat": "Graveyard",
+  "behaviors": [
+   "creak"
+  ],
+  "desc": "Velvet-lined coffin whose lid slowly creaks open and shut.",
+  "id": "coffin",
+  "file": "props/coffin.glb",
+  "thumb": "props/thumbs/coffin.jpg",
+  "size": [
+   0.84,
+   2.05,
+   0.51
+  ],
+  "tris": 140,
+  "kb": 10
+ },
+ "tombstone_rip": {
+  "name": "R.I.P. headstone",
+  "desc": "Rounded slate headstone.",
+  "cat": "Graveyard",
+  "id": "tombstone_rip",
+  "file": "props/tombstone_rip.glb",
+  "thumb": "props/thumbs/tombstone_rip.jpg",
+  "size": [
+   0.76,
+   1.14,
+   0.24
+  ],
+  "tris": 4676,
+  "kb": 178
+ },
+ "tombstone_cross": {
+  "name": "Stone cross",
+  "desc": "Weathered Celtic-style grave cross.",
+  "cat": "Graveyard",
+  "id": "tombstone_cross",
+  "file": "props/tombstone_cross.glb",
+  "thumb": "props/thumbs/tombstone_cross.jpg",
+  "size": [
+   0.62,
+   1.24,
+   0.3
+  ],
+  "tris": 372,
+  "kb": 8
+ },
+ "obelisk": {
+  "name": "Obelisk",
+  "desc": "2.2 m granite obelisk.",
+  "cat": "Graveyard",
+  "id": "obelisk",
+  "file": "props/obelisk.glb",
+  "thumb": "props/thumbs/obelisk.jpg",
+  "size": [
+   0.6,
+   2.15,
+   0.6
+  ],
+  "tris": 50,
+  "kb": 3
+ },
+ "iron_fence": {
+  "name": "Iron fence (3 m)",
+  "cat": "Graveyard",
+  "desc": "Wrought-iron graveyard fence section with spear tips.",
+  "id": "iron_fence",
+  "file": "props/iron_fence.glb",
+  "thumb": "props/thumbs/iron_fence.jpg",
+  "size": [
+   3.37,
+   1.67,
+   0.18
+  ],
+  "tris": 2688,
+  "kb": 51
+ },
+ "cauldron": {
+  "name": "Bubbling cauldron",
+  "cat": "Spooky stuff",
+  "behaviors": [
+   "flicker"
+  ],
+  "light": {
+   "type": "point",
+   "color": "#66ff33",
+   "intensity": 5,
+   "offset": [
+    0,
+    1.0,
+    0
+   ]
+  },
+  "desc": "Iron cauldron of glowing green brew over a fire.",
+  "id": "cauldron",
+  "file": "props/cauldron.glb",
+  "thumb": "props/thumbs/cauldron.jpg",
+  "size": [
+   0.92,
+   0.79,
+   0.92
+  ],
+  "tris": 2472,
+  "kb": 49
+ },
+ "jack_o_lantern": {
+  "name": "Jack-o'-lantern",
+  "cat": "Spooky stuff",
+  "behaviors": [
+   "flicker"
+  ],
+  "light": {
+   "type": "point",
+   "color": "#ff8a1e",
+   "intensity": 2.5,
+   "offset": [
+    0,
+    0.45,
+    0
+   ]
+  },
+  "desc": "Classic carved pumpkin with a candle flicker.",
+  "id": "jack_o_lantern",
+  "file": "props/jack_o_lantern.glb",
+  "thumb": "props/thumbs/jack_o_lantern.jpg",
+  "size": [
+   0.6,
+   0.54,
+   0.59
+  ],
+  "tris": 514,
+  "kb": 13
+ },
+ "pumpkin_totem": {
+  "name": "Pumpkin totem",
+  "cat": "Spooky stuff",
+  "behaviors": [
+   "flicker"
+  ],
+  "light": {
+   "type": "point",
+   "color": "#ff8a1e",
+   "intensity": 3,
+   "offset": [
+    0,
+    0.9,
+    0.25
+   ]
+  },
+  "desc": "Four grinning jack-o'-lanterns stacked into a 1.6 m totem.",
+  "id": "pumpkin_totem",
+  "file": "props/pumpkin_totem.glb",
+  "thumb": "props/thumbs/pumpkin_totem.jpg",
+  "size": [
+   0.68,
+   1.59,
+   0.66
+  ],
+  "tris": 1984,
+  "kb": 43
+ },
+ "scarecrow": {
+  "name": "Scarecrow",
+  "cat": "Ghouls",
+  "desc": "Burlap-headed scarecrow with a stitched grin.",
+  "id": "scarecrow",
+  "file": "props/scarecrow.glb",
+  "thumb": "props/thumbs/scarecrow.jpg",
+  "size": [
+   1.51,
+   2.12,
+   0.64
+  ],
+  "tris": 1324,
+  "kb": 35
+ },
+ "plague_doctor": {
+  "name": "Plague doctor",
+  "cat": "Ghouls",
+  "desc": "1.9 m beaked plague doctor with glowing green lenses.",
+  "id": "plague_doctor",
+  "file": "props/plague_doctor.glb",
+  "thumb": "props/thumbs/plague_doctor.jpg",
+  "size": [
+   0.86,
+   2.02,
+   0.85
+  ],
+  "tris": 3838,
+  "kb": 76
+ },
+ "ghost": {
+  "name": "Floating ghost",
+  "cat": "Ghouls",
+  "behaviors": [
+   "bob"
+  ],
+  "desc": "Bedsheet ghost that hovers and sways.",
+  "id": "ghost",
+  "file": "props/ghost.glb",
+  "thumb": "props/thumbs/ghost.jpg",
+  "size": [
+   0.9,
+   1.3,
+   0.8
+  ],
+  "tris": 1192,
+  "kb": 23
+ },
+ "hanging_cage": {
+  "name": "Hanging cage",
+  "cat": "Spooky stuff",
+  "behaviors": [
+   "swing"
+  ],
+  "desc": "Gibbet cage on a shepherd's hook with a red-eyed skull inside.",
+  "id": "hanging_cage",
+  "file": "props/hanging_cage.glb",
+  "thumb": "props/thumbs/hanging_cage.jpg",
+  "size": [
+   0.46,
+   2.88,
+   0.86
+  ],
+  "tris": 1992,
+  "kb": 39
+ },
+ "bat_swarm": {
+  "name": "Bat swarm",
+  "cat": "Creatures",
+  "behaviors": [
+   "flap",
+   "orbit"
+  ],
+  "desc": "Seven red-eyed bats circling overhead.",
+  "id": "bat_swarm",
+  "file": "props/bat_swarm.glb",
+  "thumb": "props/thumbs/bat_swarm.jpg",
+  "size": [
+   2.06,
+   1.18,
+   2.68
+  ],
+  "tris": 6510,
+  "kb": 103
+ },
+ "giant_moth": {
+  "name": "Giant moth",
+  "cat": "Creatures",
+  "behaviors": [
+   "flutter"
+  ],
+  "desc": "1.3 m moth with staring eyespots, slowly fanning its wings.",
+  "id": "giant_moth",
+  "file": "props/giant_moth.glb",
+  "thumb": "props/thumbs/giant_moth.jpg",
+  "size": [
+   1.32,
+   1.85,
+   0.22
+  ],
+  "tris": 1626,
+  "kb": 31
+ },
+ "spider_web": {
+  "name": "Giant web",
+  "cat": "Creatures",
+  "desc": "2.6 m orb web strung between two stakes.",
+  "id": "spider_web",
+  "file": "props/spider_web.glb",
+  "thumb": "props/thumbs/spider_web.jpg",
+  "size": [
+   2.65,
+   2.4,
+   0.06
+  ],
+  "tris": 2216,
+  "kb": 53
+ },
+ "candelabra": {
+  "name": "Candelabra",
+  "cat": "Spooky stuff",
+  "behaviors": [
+   "flicker"
+  ],
+  "light": {
+   "type": "point",
+   "color": "#ffb04a",
+   "intensity": 2.5,
+   "offset": [
+    0,
+    1.65,
+    0
+   ]
+  },
+  "desc": "Five-candle brass candelabra with a warm flicker.",
+  "id": "candelabra",
+  "file": "props/candelabra.glb",
+  "thumb": "props/thumbs/candelabra.jpg",
+  "size": [
+   0.76,
+   1.78,
+   0.4
+  ],
+  "tris": 2022,
+  "kb": 41
+ },
+ "crystal_ball": {
+  "name": "Crystal ball",
+  "cat": "Spooky stuff",
+  "behaviors": [
+   "pulse"
+  ],
+  "light": {
+   "type": "point",
+   "color": "#9a40ff",
+   "intensity": 2.5,
+   "offset": [
+    0,
+    1.2,
+    0
+   ]
+  },
+  "desc": "Fortune-teller's orb on a brass pedestal. It pulses violet.",
+  "id": "crystal_ball",
+  "file": "props/crystal_ball.glb",
+  "thumb": "props/thumbs/crystal_ball.jpg",
+  "size": [
+   0.5,
+   1.37,
+   0.5
+  ],
+  "tris": 1234,
+  "kb": 24
+ },
+ "lawn_maw": {
+  "name": "Lawn maw",
+  "cat": "Creatures",
+  "behaviors": [
+   "pulse"
+  ],
+  "light": {
+   "type": "point",
+   "color": "#ff2010",
+   "intensity": 4,
+   "offset": [
+    0,
+    0.2,
+    0
+   ]
+  },
+  "desc": "A ring of fangs where the lawn should be, glowing from the throat.",
+  "id": "lawn_maw",
+  "file": "props/lawn_maw.glb",
+  "thumb": "props/thumbs/lawn_maw.jpg",
+  "size": [
+   2.5,
+   1.05,
+   2.5
+  ],
+  "tris": 1856,
+  "kb": 37
+ },
+ "bone_throne": {
+  "name": "Bone throne",
+  "cat": "Bones",
+  "desc": "A throne of femurs and skulls. Seat a skeleton in it.",
+  "id": "bone_throne",
+  "file": "props/bone_throne.glb",
+  "thumb": "props/thumbs/bone_throne.jpg",
+  "size": [
+   0.91,
+   1.83,
+   0.9
+  ],
+  "tris": 5432,
+  "kb": 99
+ },
+ "crow_post": {
+  "name": "Crow on a post",
+  "cat": "Creatures",
+  "behaviors": [
+   "peck"
+  ],
+  "desc": "Red-eyed crow that jerks its head around.",
+  "id": "crow_post",
+  "file": "props/crow_post.glb",
+  "thumb": "props/thumbs/crow_post.jpg",
+  "size": [
+   0.16,
+   1.53,
+   0.59
+  ],
+  "tris": 964,
+  "kb": 22
+ },
+ "elk_skull": {
+  "name": "Elk skull",
+  "cat": "Bones",
+  "desc": "Weathered elk skull with a full rack.",
+  "id": "elk_skull",
+  "file": "props/elk_skull.glb",
+  "thumb": "props/thumbs/elk_skull.jpg",
+  "size": [
+   1.5,
+   1.33,
+   0.74
+  ],
+  "tris": 10716,
+  "kb": 250
+ },
+ "antler_stave": {
+  "name": "Antler stave",
+  "cat": "2026 display",
+  "desc": "Pole topped with a twine-wrapped deer skull.",
+  "id": "antler_stave",
+  "file": "props/antler_stave.glb",
+  "thumb": "props/thumbs/antler_stave.jpg",
+  "size": [
+   0.79,
+   2.89,
+   0.51
+  ],
+  "tris": 10080,
+  "kb": 232
+ },
+ "jawbone_girl": {
+  "name": "Jawbone girl",
+  "cat": "2026 display",
+  "desc": "Bald mannequin girl with a cow jawbone strapped on.",
+  "id": "jawbone_girl",
+  "file": "props/jawbone_girl.glb",
+  "thumb": "props/thumbs/jawbone_girl.jpg",
+  "size": [
+   0.56,
+   1.23,
+   0.54
+  ],
+  "tris": 4918,
+  "kb": 104
+ },
+ "mannequin_girl": {
+  "name": "Mannequin girl",
+  "cat": "2026 display",
+  "desc": "Long-haired girl in a peach dress.",
+  "id": "mannequin_girl",
+  "file": "props/mannequin_girl.glb",
+  "thumb": "props/thumbs/mannequin_girl.jpg",
+  "size": [
+   0.57,
+   1.23,
+   0.45
+  ],
+  "tris": 4058,
+  "kb": 76
+ },
+ "horned_figure": {
+  "name": "Horned figure",
+  "cat": "2026 display",
+  "desc": "Tan-gowned mannequin wearing an oryx skull.",
+  "id": "horned_figure",
+  "file": "props/horned_figure.glb",
+  "thumb": "props/thumbs/horned_figure.jpg",
+  "size": [
+   0.69,
+   2.76,
+   0.45
+  ],
+  "tris": 7998,
+  "kb": 170
+ },
+ "stone_cairn": {
+  "name": "Stone cairn + elk skull",
+  "cat": "2026 display",
+  "desc": "Fieldstone cairn with string lights and an elk skull.",
+  "id": "stone_cairn",
+  "file": "props/stone_cairn.glb",
+  "thumb": "props/thumbs/stone_cairn.jpg",
+  "size": [
+   2.39,
+   1.91,
+   2.49
+  ],
+  "tris": 24372,
+  "kb": 350
+ },
+ "lawn_tentacles": {
+  "name": "Lawn tentacles",
+  "cat": "Creatures",
+  "rig": "chain",
+  "behaviors": [
+   "sway"
+  ],
+  "desc": "Four tentacles bursting out of the lawn. They sway; every segment can be posed.",
+  "bones": [
+   {
+    "n": "t0_0",
+    "h": [
+     -0.4,
+     -0.05,
+     -0.1
+    ],
+    "t": [
+     -0.3975,
+     0.15,
+     -0.1769
+    ],
+    "p": null
+   },
+   {
+    "n": "t0_1",
+    "h": [
+     -0.3975,
+     0.15,
+     -0.1769
+    ],
+    "t": [
+     -0.39,
+     0.35,
+     -0.2463
+    ],
+    "p": "t0_0"
+   },
+   {
+    "n": "t0_2",
+    "h": [
+     -0.39,
+     0.35,
+     -0.2463
+    ],
+    "t": [
+     -0.3775,
+     0.55,
+     -0.3015
+    ],
+    "p": "t0_1"
+   },
+   {
+    "n": "t0_3",
+    "h": [
+     -0.3775,
+     0.55,
+     -0.3015
+    ],
+    "t": [
+     -0.36,
+     0.75,
+     -0.3372
+    ],
+    "p": "t0_2"
+   },
+   {
+    "n": "t0_4",
+    "h": [
+     -0.36,
+     0.75,
+     -0.3372
+    ],
+    "t": [
+     -0.3375,
+     0.95,
+     -0.35
+    ],
+    "p": "t0_3"
+   },
+   {
+    "n": "t0_5",
+    "h": [
+     -0.3375,
+     0.95,
+     -0.35
+    ],
+    "t": [
+     -0.31,
+     1.15,
+     -0.3385
+    ],
+    "p": "t0_4"
+   },
+   {
+    "n": "t0_6",
+    "h": [
+     -0.31,
+     1.15,
+     -0.3385
+    ],
+    "t": [
+     -0.2775,
+     1.35,
+     -0.3039
+    ],
+    "p": "t0_5"
+   },
+   {
+    "n": "t0_7",
+    "h": [
+     -0.2775,
+     1.35,
+     -0.3039
+    ],
+    "t": [
+     -0.24,
+     1.55,
+     -0.2496
+    ],
+    "p": "t0_6"
+   },
+   {
+    "n": "t1_0",
+    "h": [
+     0.35,
+     -0.05,
+     -0.0604
+    ],
+    "t": [
+     0.3481,
+     0.1125,
+     -0.0917
+    ],
+    "p": null
+   },
+   {
+    "n": "t1_1",
+    "h": [
+     0.3481,
+     0.1125,
+     -0.0917
+    ],
+    "t": [
+     0.3425,
+     0.275,
+     -0.0996
+    ],
+    "p": "t1_0"
+   },
+   {
+    "n": "t1_2",
+    "h": [
+     0.3425,
+     0.275,
+     -0.0996
+    ],
+    "t": [
+     0.3331,
+     0.4375,
+     -0.0834
+    ],
+    "p": "t1_1"
+   },
+   {
+    "n": "t1_3",
+    "h": [
+     0.3331,
+     0.4375,
+     -0.0834
+    ],
+    "t": [
+     0.32,
+     0.6,
+     -0.0445
+    ],
+    "p": "t1_2"
+   },
+   {
+    "n": "t1_4",
+    "h": [
+     0.32,
+     0.6,
+     -0.0445
+    ],
+    "t": [
+     0.3031,
+     0.7625,
+     0.0132
+    ],
+    "p": "t1_3"
+   },
+   {
+    "n": "t1_5",
+    "h": [
+     0.3031,
+     0.7625,
+     0.0132
+    ],
+    "t": [
+     0.2825,
+     0.925,
+     0.0841
+    ],
+    "p": "t1_4"
+   },
+   {
+    "n": "t1_6",
+    "h": [
+     0.2825,
+     0.925,
+     0.0841
+    ],
+    "t": [
+     0.2581,
+     1.0875,
+     0.1615
+    ],
+    "p": "t1_5"
+   },
+   {
+    "n": "t1_7",
+    "h": [
+     0.2581,
+     1.0875,
+     0.1615
+    ],
+    "t": [
+     0.23,
+     1.25,
+     0.2377
+    ],
+    "p": "t1_6"
+   },
+   {
+    "n": "t2_0",
+    "h": [
+     0.05,
+     -0.05,
+     -0.6773
+    ],
+    "t": [
+     0.0506,
+     0.2,
+     -0.6343
+    ],
+    "p": null
+   },
+   {
+    "n": "t2_1",
+    "h": [
+     0.0506,
+     0.2,
+     -0.6343
+    ],
+    "t": [
+     0.0525,
+     0.45,
+     -0.5735
+    ],
+    "p": "t2_0"
+   },
+   {
+    "n": "t2_2",
+    "h": [
+     0.0525,
+     0.45,
+     -0.5735
+    ],
+    "t": [
+     0.0556,
+     0.7,
+     -0.5007
+    ],
+    "p": "t2_1"
+   },
+   {
+    "n": "t2_3",
+    "h": [
+     0.0556,
+     0.7,
+     -0.5007
+    ],
+    "t": [
+     0.06,
+     0.95,
+     -0.423
+    ],
+    "p": "t2_2"
+   },
+   {
+    "n": "t2_4",
+    "h": [
+     0.06,
+     0.95,
+     -0.423
+    ],
+    "t": [
+     0.0656,
+     1.2,
+     -0.3479
+    ],
+    "p": "t2_3"
+   },
+   {
+    "n": "t2_5",
+    "h": [
+     0.0656,
+     1.2,
+     -0.3479
+    ],
+    "t": [
+     0.0725,
+     1.45,
+     -0.2826
+    ],
+    "p": "t2_4"
+   },
+   {
+    "n": "t2_6",
+    "h": [
+     0.0725,
+     1.45,
+     -0.2826
+    ],
+    "t": [
+     0.0806,
+     1.7,
+     -0.2337
+    ],
+    "p": "t2_5"
+   },
+   {
+    "n": "t2_7",
+    "h": [
+     0.0806,
+     1.7,
+     -0.2337
+    ],
+    "t": [
+     0.09,
+     1.95,
+     -0.2056
+    ],
+    "p": "t2_6"
+   },
+   {
+    "n": "t3_0",
+    "h": [
+     0.6,
+     -0.05,
+     -0.4353
+    ],
+    "t": [
+     0.5962,
+     0.0875,
+     -0.3575
+    ],
+    "p": null
+   },
+   {
+    "n": "t3_1",
+    "h": [
+     0.5962,
+     0.0875,
+     -0.3575
+    ],
+    "t": [
+     0.585,
+     0.225,
+     -0.2838
+    ],
+    "p": "t3_0"
+   },
+   {
+    "n": "t3_2",
+    "h": [
+     0.585,
+     0.225,
+     -0.2838
+    ],
+    "t": [
+     0.5663,
+     0.3625,
+     -0.2214
+    ],
+    "p": "t3_1"
+   },
+   {
+    "n": "t3_3",
+    "h": [
+     0.5663,
+     0.3625,
+     -0.2214
+    ],
+    "t": [
+     0.54,
+     0.5,
+     -0.1763
+    ],
+    "p": "t3_2"
+   },
+   {
+    "n": "t3_4",
+    "h": [
+     0.54,
+     0.5,
+     -0.1763
+    ],
+    "t": [
+     0.5063,
+     0.6375,
+     -0.1528
+    ],
+    "p": "t3_3"
+   },
+   {
+    "n": "t3_5",
+    "h": [
+     0.5063,
+     0.6375,
+     -0.1528
+    ],
+    "t": [
+     0.465,
+     0.775,
+     -0.1533
+    ],
+    "p": "t3_4"
+   },
+   {
+    "n": "t3_6",
+    "h": [
+     0.465,
+     0.775,
+     -0.1533
+    ],
+    "t": [
+     0.4162,
+     0.9125,
+     -0.1777
+    ],
+    "p": "t3_5"
+   },
+   {
+    "n": "t3_7",
+    "h": [
+     0.4162,
+     0.9125,
+     -0.1777
+    ],
+    "t": [
+     0.36,
+     1.05,
+     -0.2236
+    ],
+    "p": "t3_6"
+   }
+  ],
+  "id": "lawn_tentacles",
+  "file": "props/lawn_tentacles.glb",
+  "thumb": "props/thumbs/lawn_tentacles.jpg",
+  "size": [
+   2.16,
+   2.16,
+   1.8
+  ],
+  "tris": 11312,
+  "kb": 329
+ },
+ "grasping_arms": {
+  "name": "Grasping arms",
+  "cat": "Bones",
+  "desc": "Six skeletal arms clawing out of a dirt mound.",
+  "id": "grasping_arms",
+  "file": "props/grasping_arms.glb",
+  "thumb": "props/thumbs/grasping_arms.jpg",
+  "size": [
+   1.5,
+   0.94,
+   1.5
+  ],
+  "tris": 3000,
+  "kb": 58
+ }
+}

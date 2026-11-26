@@ -125,8 +125,9 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { initWalk } from './walk.js?v=9';
-import { addNeighborhood } from './neighborhood.js?v=10';
+import { initWalk } from './walk.js?v=11';
+import { addNeighborhood } from './neighborhood.js?v=11';
+import { initDecorator } from './decorator.js?v=11';
 
 const LABELS = {
   Cam_01_Street_Wide: 'From the street', Cam_02_Yard_Front: 'Front yard', Cam_03_Ritual: 'The circle',
@@ -153,6 +154,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.maxPolarAngle = Math.PI * 0.495;
 controls.maxDistance = 140;
+controls.addEventListener('change', () => {});
 
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
@@ -165,7 +167,7 @@ scene.add(hemi);
 const K_SPOT = 3.2, K_SUN = 1.6, EMIT_K = 0.1;
 const GROUP = { Red_Stake_Spot: 0.16, Red_Uplight_Small: 0.45, Red_Wash_Porch: 1.0 };
 const lights = [];
-let info, walk;
+let info, walk, deco;
 
 function resize() {
   const w = stage.clientWidth, h = stage.clientHeight;
@@ -196,7 +198,7 @@ Promise.all([fetch('scene.json').then(r => r.json()), loader.loadAsync('scene.gl
   catch (e) { console.warn('neighbourhood failed', e); }
   walk = initWalk({ scene, camera, renderer, orbit: controls, root: gltf.scene,
     extraFloors: hood ? hood.floors : [], extraWalls: hood ? hood.walls : [], extent: hood ? hood.extent : 38, ui: {
-    onWalk: on => { document.body.classList.toggle('walking', on); $('walkBtn').textContent = on ? '✕ Stop walking' : '🚶 Walk around';
+    onWalk: on => { if (on && deco) deco.setDecorating(false); document.body.classList.toggle('walking', on); $('walkBtn').textContent = on ? '✕ Stop walking' : '🚶 Walk around';
                     $('paused').style.display = 'none'; },
     onPaused: () => { $('paused').style.display = 'grid'; } } });
   for (const L of info.lights) {
@@ -233,10 +235,13 @@ Promise.all([fetch('scene.json').then(r => r.json()), loader.loadAsync('scene.gl
   buildViews(); buildPairs(); applyLighting(); resize();
   goTo(info.cameras[0], false);
   document.getElementById('loading').remove();
+  deco = initDecorator({ scene, camera, renderer, orbit: controls, root: gltf.scene, hood,
+    redLights: lights.filter(l => l.userData.red) });
   const clock = new THREE.Clock();
   renderer.setAnimationLoop(() => {
     const dt = clock.getDelta();
     if (walk && walk.on) walk.update(dt); else { controls.update(); tween(); }
+    deco.update();
     composer.render();
   });
   if (location.hash === '#walk') walk.enter();

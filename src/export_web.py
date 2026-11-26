@@ -63,6 +63,20 @@ for m in bpy.data.materials:
         for fc in list(m.node_tree.animation_data.drivers):
             m.node_tree.driver_remove(fc.data_path, fc.array_index)
 
+# procedural colour (noise ramps) doesn't survive glTF: bake each to its flat representative colour
+for m in bpy.data.materials:
+    if not m.node_tree:
+        continue
+    b = m.node_tree.nodes.get("Principled BSDF")
+    if b and b.inputs["Base Color"].is_linked:
+        for l in list(b.inputs["Base Color"].links):
+            m.node_tree.links.remove(l)
+        b.inputs["Base Color"].default_value = m.diffuse_color
+    for inp in ("Normal",):
+        if b and b.inputs[inp].is_linked:
+            for l in list(b.inputs[inp].links):
+                m.node_tree.links.remove(l)
+
 bpy.ops.export_scene.gltf(filepath=os.path.join(WEB, "scene.glb"), export_format="GLB",
                           export_apply=True, export_lights=False, export_cameras=False,
                           export_draco_mesh_compression_enable=True, export_draco_mesh_compression_level=7,

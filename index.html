@@ -67,7 +67,7 @@
     <label>Night ↔ Day <input type="range" id="day" min="0" max="1" step="0.01" value="0"></label>
     <label>Red lights <input type="range" id="redPower" min="0" max="3" step="0.01" value="1"></label>
     <label>Colour <input type="color" id="redColor" value="#ff0904"></label>
-    <label>Glow <input type="range" id="bloom" min="0" max="2" step="0.01" value="0.5"></label>
+    <label>Glow <input type="range" id="bloom" min="0" max="2" step="0.01" value="0.45"></label>
     <label>Exposure <input type="range" id="exposure" min="0.2" max="3" step="0.01" value="1"></label>
   </div>
   <div id="hint">drag to orbit · scroll to zoom · right-drag to pan</div>
@@ -135,7 +135,7 @@ controls.maxPolarAngle = Math.PI * 0.495;
 
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
-const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.35, 0.92);
+const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.45, 0.3, 1.0);
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
 
@@ -178,6 +178,7 @@ Promise.all([fetch('scene.json').then(r => r.json()), loader.loadAsync('scene.gl
         : new THREE.PointLight(col, cd, 0, 2);
       if (L.type === 'SPOT') { l.target.position.set(...L.target); scene.add(l.target); }
       if (L.name.startsWith('Red_Wash')) {
+        L.pos = [L.pos[0], L.pos[1] + 1.4, L.pos[2] + 1.0];   // lift off the ground: avoids a blown-out hotspot
         l.castShadow = true; l.shadow.mapSize.set(2048, 2048); l.shadow.bias = -0.0004;
       }
     } else if (L.type === 'SUN') {

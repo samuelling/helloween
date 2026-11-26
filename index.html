@@ -67,8 +67,8 @@
     <label>Night ↔ Day <input type="range" id="day" min="0" max="1" step="0.01" value="0"></label>
     <label>Red lights <input type="range" id="redPower" min="0" max="3" step="0.01" value="1"></label>
     <label>Colour <input type="color" id="redColor" value="#ff0904"></label>
-    <label>Glow <input type="range" id="bloom" min="0" max="2" step="0.01" value="0.45"></label>
-    <label>Exposure <input type="range" id="exposure" min="0.2" max="3" step="0.01" value="1"></label>
+    <label>Glow <input type="range" id="bloom" min="0" max="2" step="0.01" value="0.35"></label>
+    <label>Exposure <input type="range" id="exposure" min="0.2" max="3" step="0.01" value="0.75"></label>
   </div>
   <div id="hint">drag to orbit · scroll to zoom · right-drag to pan</div>
 </section>
@@ -142,7 +142,7 @@ composer.addPass(new OutputPass());
 const hemi = new THREE.HemisphereLight(0xbfd4ff, 0x2a2018, 0);
 scene.add(hemi);
 const K_SPOT = 3.2, K_SUN = 1.6, EMIT_K = 0.1;
-const GROUP = { Red_Stake_Spot: 0.28, Red_Uplight_Small: 0.55, Red_Wash_Porch: 1.0 };
+const GROUP = { Red_Stake_Spot: 0.16, Red_Uplight_Small: 0.45, Red_Wash_Porch: 1.0 };
 const lights = [];
 let info;
 

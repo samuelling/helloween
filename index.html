@@ -142,6 +142,7 @@ composer.addPass(new OutputPass());
 const hemi = new THREE.HemisphereLight(0xbfd4ff, 0x2a2018, 0);
 scene.add(hemi);
 const K_SPOT = 3.2, K_SUN = 1.6, EMIT_K = 0.1;
+const GROUP = { Red_Stake_Spot: 0.28, Red_Uplight_Small: 0.55, Red_Wash_Porch: 1.0 };
 const lights = [];
 let info;
 
@@ -212,7 +213,7 @@ function applyLighting() {
   const rc = new THREE.Color($('redColor').value);
   for (const l of lights) {
     const L = l.userData;
-    if (L.red) { l.color.copy(rc); l.intensity = L.watts / (4 * Math.PI) * K_SPOT * p * (1 - d); }
+    if (L.red) { l.color.copy(rc); l.intensity = L.watts / (4 * Math.PI) * K_SPOT * p * (1 - d) * (GROUP[L.data] ?? 1); }
     else if (L.name === 'Day_Sun') l.intensity = 4.5 * K_SUN * d;
     else if (L.name === 'Night_Street_Fill') l.intensity = 0.05 * K_SUN * (1 - d);
     else if (L.type === 'POINT') l.intensity = L.watts / (4 * Math.PI) * K_SPOT * (1 - 0.8 * d);

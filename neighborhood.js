@@ -30,7 +30,7 @@ export async function addNeighborhood(scene) {
   }
   for (let j = 0; j < T.ny - 1; j++) for (let i = 0; i < T.nx - 1; i++) {
     const a = j * T.nx + i, b = a + 1, c = a + T.nx, d = c + 1;
-    idx.push(a, c, b, b, c, d);
+    idx.push(a, b, c, b, d, c);
   }
   const tg = new THREE.BufferGeometry();
   tg.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));

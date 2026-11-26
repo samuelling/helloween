@@ -162,7 +162,7 @@ drive(mix.inputs["Fac"], "default_value", "d", [("d", "daylight")])
 # =============================================================== cameras (+ reference photos)
 Ccam = coll("Cameras", root)
 PHOTOS = {  # camera -> (reference photo, location, target, lens)
-    "Cam_01_Street_Wide": ("IMG_9899.jpeg", (1.0, -17.6, 1.35), (-0.7, -1.0, 4.4), 23),
+    "Cam_01_Street_Wide": ("IMG_9899.jpeg", (1.0, -17.6, 1.35), (-0.5, -1.0, 4.6), 30),
     "Cam_02_Yard_Front": ("IMG_0133.jpeg", (-0.8, -12.3, 1.3), (-0.9, -2.0, 3.6), 25),
     "Cam_03_Ritual": ("IMG_0134.jpeg", (-2.3, -9.3, 1.55), (-2.6, -3.0, 1.75), 25),
     "Cam_04_Horned_Figure": ("IMG_0135.jpeg", (1.5, -5.1, 1.0), (1.5, -2.8, 2.05), 26),
